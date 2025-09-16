@@ -1,0 +1,133 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+
+public class Matrix {
+    int rows = 0, columns = 0, minVal = 0, maxVal = 0;
+    int[][] matrix;
+
+    public Matrix(){}
+
+    public Matrix(int _rows, int _columns) 
+    {
+        rows = _rows;
+        columns = _columns;
+        matrix = new int[rows][columns];
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+
+    public Matrix(int _rows, int _columns, int _minVal, int _maxVal) {
+        rows = _rows;
+        columns = _columns;
+        minVal = _minVal;
+        maxVal = _maxVal;
+        matrix = new int[rows][columns];
+        Random rand = new Random();
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                matrix[i][j] = rand.nextInt(maxVal - minVal + 1) + minVal;
+            }
+        }
+    }
+
+    public Matrix(String filename)
+    {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename)))
+        {
+            // reader.mark(0);
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.isEmpty()) continue;
+                if (line.split("\\s+").length > columns)
+                {
+                    columns = line.split("\\s+").length;
+                }
+                rows++;
+            }
+
+            matrix = new int[rows][columns];
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename)))
+        {
+            String line;
+            int i = 0;
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.isEmpty()) continue;
+                String[] elements = line.split("\\s+");
+                for (int j = 0; j < columns; j++)
+                {
+                    matrix[i][j] = Integer.parseInt(elements[j]);
+                }
+                i++;
+            }
+
+            reader.close();
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public int get(int _row, int _column)
+    {
+        return matrix[_row][_column];
+    }
+
+
+    public static void generateMatrixToFile(String filename, int _rows, int _columns, int _minVal, int _maxVal)
+    {
+        try(FileWriter writer = new FileWriter(filename))
+        {
+            Random rand = new Random();
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    writer.write((rand.nextInt(_maxVal - _minVal + 1) + _minVal) + " ");
+                }
+                writer.write("\n");
+            }
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void print()
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.print("\n");
+        }
+    }
+}

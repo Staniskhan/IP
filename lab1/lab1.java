@@ -4,7 +4,7 @@ public class lab1{
 
     public static void main (String args[]){
 
-        String text = "Program is used to count sinh using a Taylor row.\n"+
+        String text = "\nProgram is used to count sinh using a Taylor series.\n"+
                 "Enter the value of number, which sinh you would like to count (x)\n"+
                 "and degree of accuracy (k). The counting will last untill a summand will be bigger than 10^(-k)";
         System.out.print(text);
@@ -14,8 +14,9 @@ public class lab1{
         double x = in.nextDouble();
         System.out.print("Enter k: ");
         int k = in.nextInt();
+        in.close();
 
-        System.out.println("\nx = " +x + "\nk = " + k);
+        System.out.println("\nx = " + x + "\nk = " + k);
 
         double summand, answer, limit;
 

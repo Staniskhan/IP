@@ -1,7 +1,9 @@
 {
     "java.project.sourcePaths": [
+        "modifiedLab1",
+        "lab2",
         "lab1",
-        "lab2"
+        "modifiedLab2"
     ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
