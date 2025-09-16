@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class Matrix {
@@ -44,7 +45,6 @@ public class Matrix {
     {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename)))
         {
-            // reader.mark(0);
             String line;
             while ((line = reader.readLine()) != null)
             {
@@ -81,6 +81,8 @@ public class Matrix {
                 for (int j = 0; j < columns; j++)
                 {
                     matrix[i][j] = Integer.parseInt(elements[j]);
+                    if (matrix[i][j] > maxVal) maxVal = matrix[i][j];
+                    if (matrix[i][j] < minVal) minVal = matrix[i][j];
                 }
                 i++;
             }
@@ -129,5 +131,30 @@ public class Matrix {
             }
             System.out.print("\n");
         }
+    }
+
+
+    public int MaxRepeatingElement() throws NoSuchElementException
+    {
+        int count;
+        for (int k = maxVal; k >= minVal; k--)
+        {
+            count = 0;
+            for(int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (matrix[i][j] == k)
+                    {
+                        count++;
+                    }
+                    if (count == 2)
+                    {
+                        return matrix[i][j];
+                    }
+                }
+            }
+        }
+        throw new NoSuchElementException("THERE ARE NO REPEATING ELEMENTS IN THE MATRIX!");
     }
 }
