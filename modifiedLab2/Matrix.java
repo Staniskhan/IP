@@ -100,6 +100,11 @@ public class Matrix {
         return matrix[_row][_column];
     }
 
+    public void set(int value, int _row, int _column)
+    {
+        matrix[_row][_column] = value;
+    }
+
 
     public static void generateMatrixToFile(String filename, int _rows, int _columns, int _minVal, int _maxVal)
     {
@@ -161,14 +166,14 @@ public class Matrix {
 
     public int numberOfUniqueSetsOfRows()
     {
-        int[][] sortedMatrix = new int[rows][columns];
-        for (int i = 0; i < rows; i++)
-        {
-            for (int j = 0; j < columns; j++)
-            {
-                sortedMatrix[i][j] = matrix[i][j];
-            }
-        }
+        int[][] sortedMatrix = matrix;
+        // for (int i = 0; i < rows; i++)
+        // {
+        //     for (int j = 0; j < columns; j++)
+        //     {
+        //         sortedMatrix[i][j] = matrix[i][j];
+        //     }
+        // }
         // sortedMatrix = matrix;
 
         int answer = 1;
@@ -212,5 +217,51 @@ public class Matrix {
 
         }
         return answer;
+    }
+
+
+
+    public void sumOfPositiveEvenNumbersSortUp()
+    {
+                //----------------counting sums--------------------------
+
+        int[] array = new int[rows];
+        int sum;
+
+        for (int i = 0; i < rows; i++)
+        {
+            sum = 0;
+            for (int j = 0; j < columns; j++)
+            {
+                if (matrix[i][j] > 0 && matrix[i][j] % 2 == 0)
+                {
+                    sum += matrix[i][j];
+                }
+            }
+            array[i] = sum;
+        }
+
+
+        //-------------------sorting matrix--------------------------
+
+        for (int k = 0; k < rows - 1; k++)
+        {
+            for (int i = 1; i < rows; i++)
+            {
+                if (array[i - 1] > array[i])
+                {
+                    array[i - 1] += array[i];
+                    array[i] = array[i - 1] - array[i];
+                    array[i - 1] = array[i - 1] - array[i];
+
+                    for (int j = 0; j < columns; j++)
+                    {
+                        matrix[i - 1][j] += matrix[i][j];
+                        matrix[i][j] = matrix[i - 1][j] - matrix[i][j];
+                        matrix[i - 1][j] = matrix[i - 1][j] - matrix[i][j];
+                    }
+                }
+            }
+        }
     }
 }
