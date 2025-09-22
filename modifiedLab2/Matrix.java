@@ -157,4 +157,60 @@ public class Matrix {
         }
         throw new NoSuchElementException("THERE ARE NO REPEATING ELEMENTS IN THE MATRIX!");
     }
+
+
+    public int numberOfUniqueSetsOfRows()
+    {
+        int[][] sortedMatrix = new int[rows][columns];
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                sortedMatrix[i][j] = matrix[i][j];
+            }
+        }
+        // sortedMatrix = matrix;
+
+        int answer = 1;
+        boolean indicator = false;
+        for (int i = 0; i < rows; i++)
+        {
+            for (int k = 0; k < columns - 1; k++) {
+                for (int j = 1; j < columns; j++) {
+                    if (sortedMatrix[i][j - 1] > sortedMatrix[i][j]) {
+                        sortedMatrix[i][j - 1] += sortedMatrix[i][j];
+                        sortedMatrix[i][j] = sortedMatrix[i][j - 1] - sortedMatrix[i][j];
+                        sortedMatrix[i][j - 1] = sortedMatrix[i][j - 1] - sortedMatrix[i][j];
+                    }
+                }
+            }
+
+            for (int k = i - 1; k >= 0; k--)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (sortedMatrix[i][j] != sortedMatrix[k][j])
+                    {
+                        indicator = true;
+                        break;
+                    }
+                }
+                if (indicator && k != 0)
+                {
+                    indicator = false;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (indicator)
+            {
+                indicator = false;
+                answer++;
+            }
+
+        }
+        return answer;
+    }
 }

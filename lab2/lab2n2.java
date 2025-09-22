@@ -5,7 +5,7 @@ public class lab2n2
     public static void main(String[] args)
     {
         //----------------start parameters------------------
-        int columns = 5, rows = 10, maxVal = 3, minVal = 1;
+        int columns = 5, rows = 4, maxVal = 4, minVal = 2;
         //------matrix declaration and initialization-------
         int[][] matrix = new int[rows][columns];
         Random rand = new Random();
