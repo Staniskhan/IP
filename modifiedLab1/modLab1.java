@@ -19,6 +19,7 @@ public class modLab1
 
         TaylorSeries ts = new TaylorSeries();
         System.out.print("\nsinh(x) = " + ts.sinh(x, k));
+        System.out.println("\nMath.sinh(x) = " + Math.sinh(x));
     }
 
 }

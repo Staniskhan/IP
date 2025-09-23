@@ -40,7 +40,8 @@ public class lab1{
             answer += summand;
         }
 
-        answer = (double)Math.round(answer * 1000) / 1000;
+        answer = (double)Math.round(answer * 100000) / 100000;
         System.out.print("\nsinh(x) = " + answer);
+        System.out.println("\nMath.sinh(x) = " + Math.sinh(x));
     }
 }

@@ -2,7 +2,7 @@ public class modLab2n2
 {
     public static void main(String[] args)
     {
-        Matrix.generateMatrixToFile("matr.txt", 4, 3, 2, 4);
+        Matrix.generateMatrixToFile("matr.txt", 4, 4, 2, 4);
             Matrix matrix = new Matrix("matr.txt");
 
 
