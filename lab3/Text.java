@@ -99,4 +99,14 @@ public class Text
             e.printStackTrace();
         }
     }
+
+    public String get(int index)
+    {
+        return text.get(index);
+    }
+
+    public int size()
+    {
+        return text.size();
+    }
 }
