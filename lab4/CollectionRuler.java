@@ -33,7 +33,7 @@ The format of the input File
 x. <number of disciplines in the 2-nd sem>                                                    |              |          |
 .................................                                                            /              /           |
 y. <surname>                                                                                                            |
-.................................     
+.................................                                                                                      /
 
 
 */
