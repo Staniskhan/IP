@@ -6,6 +6,40 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+
+/*
+
+
+The format of the input File
+
+* "no" means that there is no exam/test/semester mark
+* "-" means incomplete
+* "+" means complete\n"
+
+
+1. number of students                                                                              // for collection ruler
+2. <surname>                                                                                                \          \
+3. <name>                                                                                                    |          |
+4. <surname>                                                                                                 |          |
+5. <year> <group> <semester>                                                                                 |          |
+6. <number of passed sessions>                                                                               |          |
+7. <number of disciplines in the 1-st sem>                                      \            \               |          |
+8. <1-st discipline name>                           \            \               |            |              |\student  |
+9. <1-st discipline semester mark>                   |\discipline |              |            |              |/         |\students
+10. <1-st discipline test mark>                      |/           |\disciplines   >semester   |              |          |/
+11. <1-st discipline exam mark>                     /             |/             |             >semesteres   |          |
+12. <2-nd discipline name>                                        |              |            |              |          |
+.................................                                /              /             |              |          |
+x. <number of disciplines in the 2-nd sem>                                                    |              |          |
+.................................                                                            /              /           |
+y. <surname>                                                                                                            |
+.................................     
+
+
+*/
+
+
+
 public class CollectionRuler {
     public static float AVGAllSemsMark(StudRecordBook srb)
     {
@@ -135,45 +169,54 @@ public class CollectionRuler {
 
     public CollectionRuler (String filename)
     {
-        students = new Vector<>();
         try
         {
-            File file = new File(filename);
-            Scanner fileScanner = new Scanner(file);
-            number_of_students = Integer.parseInt(fileScanner.nextLine());
-
-            for (int i = 0; i < number_of_students; i++)
+            students = new Vector<>();
+            try
             {
-                String surname = fileScanner.nextLine();
-                String name = fileScanner.nextLine();
-                String second_name = fileScanner.nextLine();
-                StringTokenizer strtok = new StringTokenizer(fileScanner.nextLine(), "\s+");
-                int year = Integer.parseInt(strtok.nextToken());
-                int group = Integer.parseInt(strtok.nextToken());
-                int semester = Integer.parseInt(strtok.nextToken());
-                String args = fileScanner.nextLine();
-                int num_of_passed_sessions = Integer.parseInt(args);
-                args += " ";
-                for (int a = 0; a < num_of_passed_sessions; a++)
+                File file = new File(filename);
+                Scanner fileScanner = new Scanner(file);
+                number_of_students = Integer.parseInt(fileScanner.nextLine());
+
+                for (int i = 0; i < number_of_students; i++)
                 {
-                    String num_of_dis_str = fileScanner.nextLine();
-                    args += num_of_dis_str + " ";
-                    int num_of_disciplines = Integer.parseInt(num_of_dis_str);
-                    for (int b = 0; b < 4 * num_of_disciplines; b++)
+                    String surname = fileScanner.nextLine();
+                    String name = fileScanner.nextLine();
+                    String second_name = fileScanner.nextLine();
+                    StringTokenizer strtok = new StringTokenizer(fileScanner.nextLine(), "\s+");
+                    int year = Integer.parseInt(strtok.nextToken());
+                    int group = Integer.parseInt(strtok.nextToken());
+                    int semester = Integer.parseInt(strtok.nextToken());
+                    String args = fileScanner.nextLine();
+                    int num_of_passed_sessions = Integer.parseInt(args);
+                    args += " ";
+                    for (int a = 0; a < num_of_passed_sessions; a++)
                     {
-                        args += fileScanner.nextLine();
-                        args += " ";
+                        String num_of_dis_str = fileScanner.nextLine();
+                        args += num_of_dis_str + " ";
+                        int num_of_disciplines = Integer.parseInt(num_of_dis_str);
+                        for (int b = 0; b < 4 * num_of_disciplines; b++)
+                        {
+                            args += fileScanner.nextLine();
+                            args += " ";
+                        }
                     }
+                    StudRecordBook srb_curr = new StudRecordBook(surname, name, second_name, year, group, semester, args);
+                    students.addElement(srb_curr);
                 }
-                StudRecordBook srb_curr = new StudRecordBook(surname, name, second_name, year, group, semester, args);
-                students.addElement(srb_curr);
+            }
+            catch(FileNotFoundException e)
+            {
+                System.out.println("\nFILE NOT FOUND\n");
+                e.printStackTrace();
             }
         }
-        catch(FileNotFoundException e)
+        catch (Exception e)
         {
-            System.out.println("\nFILE NOT FOUND\n");
+            System.out.println("OOPS! SMTH WENT WRONG. HERE'S THE DISCRIPTION OF THE EXCEPTION:");
             e.printStackTrace();
         }
+
 
     }
 
