@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -45,12 +47,68 @@ public class StudRecordBook
         }
 
 
+        public String getSes()
+        {
+            String ret = "";
+            ret += "---\nnumber of session: " + number /*+ "\n---\ndisciplines\n"*/
+            // + "* \"no\" means that there is no exam/test/semester mark\n"
+            // + "* \"-\" means incomplete\n"
+            // + "* \"+\" means complete\n"
+            + "\ndiscipline_name   :   semester mark/test mark/exam mark:\n";
+            for (int i = 0; i < number_of_disciplines; i++)
+            {
+                ret += disciplines.get(i).disciplineName + "\t:\t";
+                if (disciplines.get(i).semesterMark == -2)
+                {
+                    ret += "no/";
+                }
+                else if (disciplines.get(i).semesterMark == -1)
+                {
+                    ret += "*/";
+                }
+                else 
+                {
+                    ret += disciplines.get(i).semesterMark + "/";
+                }
+                if (disciplines.get(i).testMark == -2)
+                {
+                    ret += "no/";
+                }
+                else if (disciplines.get(i).testMark == 0)
+                {
+                    ret += "-/";
+                }
+                else if (disciplines.get(i).testMark == -1)
+                {
+                    ret += "*/";
+                }
+                else
+                {
+                    ret += "+/";
+                }
+                if (disciplines.get(i).examMark == -2)
+                {
+                    ret += "no\n";
+                }
+                else if (disciplines.get(i).examMark == -1)
+                {
+                    ret += "*/";
+                }
+                else 
+                {
+                    ret += disciplines.get(i).examMark + "\n";
+                }
+            }
+            return ret;
+        }
+
+
         public void printses()
         {
-            System.out.println("---\nnumber of session: " + number + "\n---\ndisciplines\n"
-            + "* \"no\" means that there is no exam/test/semester mark\n"
-            + "* \"-\" means incomplete\n"
-            + "* \"+\" means complete\n"
+            System.out.println("---\nnumber of session: " + number /*+ "\n---\ndisciplines\n"*/
+            // + "* \"no\" means that there is no exam/test/semester mark\n"
+            // + "* \"-\" means incomplete\n"
+            // + "* \"+\" means complete\n"
             + "\ndiscipline_name   :   semester mark/test mark/exam mark:");
             for (int i = 0; i < number_of_disciplines; i++)
             {
@@ -97,6 +155,9 @@ public class StudRecordBook
                 }
             }
         }
+
+
+
 
         public int[] examMarksSes()
         {
@@ -167,6 +228,28 @@ public class StudRecordBook
         }
         System.out.println("-------------------------");
     }
+
+    public void fileOut(String filename)
+    {
+        try(FileWriter writer = new FileWriter(filename, true))
+        {
+            writer.write("-------------------------\nsurname: " + surname + "\nname: " + name + "\nsecond name: " + second_name + "\nyear: " + year + "\ngroup: " + group + "\nsemester: " + semester + "\n");
+            for (int i = 0; i < sessions.size(); i++)
+            {
+                writer.write(sessions.get(i).getSes());
+            }
+            writer.write("\n-------------------------\n");
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+
+
+    }
     
 
     public int[] getAllExamMarks()
@@ -211,6 +294,11 @@ public class StudRecordBook
 
     public int[] getExamMarks(int numOfSession)
     {
+        if (numOfSession - 1 > sessions.size())
+        {
+            int ret[] = new int[1];
+            return ret;
+        }
         int ret[] = new int[sessions.get(numOfSession - 1).number_of_disciplines];
         for (int i = 0; i < sessions.get(numOfSession - 1).number_of_disciplines; i++)
         {
@@ -222,10 +310,39 @@ public class StudRecordBook
 
     public int[] getSemMarks(int numOfSem)
     {
+        if (numOfSem - 1 > sessions.size())
+        {
+            int ret[] = new int[1];
+            return ret;
+        }
         int ret[] = new int[sessions.get(numOfSem - 1).number_of_disciplines];
         for (int i = 0; i < sessions.get(numOfSem - 1).number_of_disciplines; i++)
         {
             ret[i] = sessions.get(numOfSem - 1).disciplines.get(i).semesterMark;
+        }
+        return ret;
+    }
+
+
+    public boolean isExcellentStudent()
+    {
+        boolean ret = true;
+        for (int i = 0; i < number_of_passed_sessions; i++)
+        {
+            for (int j = 0; j < sessions.get(i).number_of_disciplines; j++)
+            {
+                if (((sessions.get(i).disciplines.get(j).examMark < 9) && (sessions.get(i).disciplines.get(j).examMark > -2))
+                || ((sessions.get(i).disciplines.get(j).semesterMark < 9) && (sessions.get(i).disciplines.get(j).semesterMark > -2))
+                || ((sessions.get(i).disciplines.get(j).testMark < 1) && (sessions.get(i).disciplines.get(j).testMark > -2)))
+                {
+                    ret = false;
+                    break;
+                }
+            }
+            if (!ret)
+            {
+                break;
+            }
         }
         return ret;
     }
