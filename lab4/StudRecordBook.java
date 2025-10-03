@@ -261,11 +261,13 @@ public class StudRecordBook
         }
 
         int ret[] = new int[count];
+        int k = 0;
         for (int i = 0; i < number_of_passed_sessions; i++)
         {
             for (int j = 0; j < sessions.get(i).number_of_disciplines; j++)
             {
-                ret[(i+1)*j] = sessions.get(i).disciplines.get(j).examMark;
+                ret[k] = sessions.get(i).disciplines.get(j).examMark;
+                k++;
             }
         }
         return ret;
@@ -281,11 +283,13 @@ public class StudRecordBook
         }
 
         int ret[] = new int[count];
+        int k = 0;
         for (int i = 0; i < number_of_passed_sessions; i++)
         {
             for (int j = 0; j < sessions.get(i).number_of_disciplines; j++)
             {
-                ret[(i+1)*j] = sessions.get(i).disciplines.get(j).semesterMark;
+                ret[k] = sessions.get(i).disciplines.get(j).semesterMark;
+                k++;
             }
         }
         return ret;

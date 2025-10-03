@@ -24,7 +24,7 @@ The format of the input File
 5. <year> <group> <semester>                                                                                 |          |
 6. <number of passed sessions>                                                                               |          |
 7. <number of disciplines in the 1-st sem>                                      \            \               |          |
-8. <1-st discipline name>                           \            \               |            |              |\student  |
+8. <1-st_discipline_name>                           \            \               |            |              |\student  |
 9. <1-st discipline semester mark>                   |\discipline |              |            |              |/         |\students
 10. <1-st discipline test mark>                      |/           |\disciplines   >semester   |              |          |/
 11. <1-st discipline exam mark>                     /             |/             |             >semesteres   |          |

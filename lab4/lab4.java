@@ -2,32 +2,25 @@
 public class lab4 {
     public void main(String args[])
     {
-        // String rest = "1 2 ova 5 1 6 linal 6 1 4";
-        // StudRecordBook srb = new StudRecordBook("surname", "name", "second_name", 2, 7, 3, rest);
-        // srb.print();
-        // System.out.println("\n\n\n");
-        // System.out.println(srb.getAllExamMarks()[0]);
-        // System.out.println(srb.getAllExamMarks()[1]);
-        // System.out.println(CollectionRuler.AVGAllSemsMark(srb));
-        // System.out.println(CollectionRuler.AVGAllExamsMark(srb));
-        // System.out.println(CollectionRuler.AVG(srb));
-        // srb.fileOut("output.txt");
-        CollectionRuler clctrlr = new CollectionRuler("input.txt");
-        clctrlr.fileOutAVG("output.txt");
+        CRTest.generateFile("lab4.txt", 10, 5, 4, 7);
+        CollectionRuler clctrlr = new CollectionRuler("lab4.txt");
+        clctrlr.fileOutAllInformation("allInf.txt");
+        clctrlr.fileOutNames("names.txt");
+        clctrlr.fileOutAVG("AVG.txt");
         clctrlr.sortAVGUp();
-        clctrlr.fileOutAVG("output.txt");
+        clctrlr.fileOutAVG("sortUpAVG.txt");
         clctrlr.sortAVGDown();
-        clctrlr.fileOutAVG("output.txt");
+        clctrlr.fileOutAVG("sortDownAVG.txt");
         clctrlr.sortNameUp();
-        clctrlr.fileOutAVG("output.txt");
+        clctrlr.fileOutNames("sortUpName.txt");
         clctrlr.sortNameDown();
-        clctrlr.fileOutAVG("output.txt");
+        clctrlr.fileOutNames("sortDownName.txt");
         clctrlr.sortYearGroupUp();
-        clctrlr.fileOutAllInformation("output.txt");
+        clctrlr.fileOutAllInformation("sortUpYearGroup.txt");
         clctrlr.sortYearGroupDown();
-        clctrlr.fileOutAllInformation("output.txt");
-        clctrlr.fileOutExcellentStudentsAllInf("output.txt");
-        clctrlr.fileOutExcellentStudentsNames("output.txt");
-        clctrlr.fileOutExcellentStudentsAVG("output.txt");
+        clctrlr.fileOutAllInformation("sortDownYearGroup.txt");
+        clctrlr.fileOutExcellentStudentsAllInf("ExcellentStudentsAllInf.txt");
+        clctrlr.fileOutExcellentStudentsNames("ExcellentStudentsNames.txt");
+        clctrlr.fileOutExcellentStudentsAVG("ExcellentStudentsAVG.txt");
     }
 }
