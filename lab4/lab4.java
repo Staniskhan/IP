@@ -2,8 +2,8 @@
 public class lab4 {
     public void main(String args[])
     {
-        CRTest.generateFile("lab4.txt", 10, 5, 4, 7);
-        CollectionRuler clctrlr = new CollectionRuler("lab4.txt");
+        CRTest.generateFile("lab4_input.txt", 10, 5, 4, 7);
+        CollectionRuler clctrlr = new CollectionRuler("lab4_input.txt");
         clctrlr.fileOutAllInformation("allInf.txt");
         clctrlr.fileOutNames("names.txt");
         clctrlr.fileOutAVG("AVG.txt");

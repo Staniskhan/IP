@@ -59,6 +59,7 @@ public class CollectionRuler {
         }
 
         avg /= (float)count;
+        avg = (float)Math.round(avg * 100) / 100;
         return avg;
     }
 
@@ -80,6 +81,7 @@ public class CollectionRuler {
         }
 
         avg /= (float)count;
+        avg = (float)Math.round(avg * 100) / 100;
         return avg;
     }
 
@@ -101,6 +103,7 @@ public class CollectionRuler {
         }
 
         avg /= (float)count;
+        avg = (float)Math.round(avg * 100) / 100;
         return avg;
     }
 
@@ -122,6 +125,7 @@ public class CollectionRuler {
         }
 
         avg /= (float)count;
+        avg = (float)Math.round(avg * 100) / 100;
         return avg;
     }
 
@@ -157,6 +161,7 @@ public class CollectionRuler {
         }
 
         avg /= (float)count;
+        avg = (float)Math.round(avg * 100) / 100;
         return avg;
     }
 
@@ -238,7 +243,7 @@ public class CollectionRuler {
 
         for (int i = 0; i < number_of_students; i++)
         {
-            students.get(i).fileOut("output.txt");
+            students.get(i).fileOut(filename);
         }
     }
 
@@ -388,7 +393,7 @@ public class CollectionRuler {
             {
                 String str1 = students.get(j - 1).surname + " " + students.get(j - 1).name + " " + students.get(j - 1).second_name;
                 String str2 = students.get(j).surname + " " + students.get(j).name + " " + students.get(j).second_name;
-                if (str1.compareTo(str2) == 1)
+                if (str1.compareTo(str2) > 0)
                 {
                     StudRecordBook srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
@@ -407,7 +412,7 @@ public class CollectionRuler {
             {
                 String str1 = students.get(j - 1).surname + " " + students.get(j - 1).name + " " + students.get(j - 1).second_name;
                 String str2 = students.get(j).surname + " " + students.get(j).name + " " + students.get(j).second_name;
-                if (str2.compareTo(str1) == 1)
+                if (str2.compareTo(str1) > 0)
                 {
                     StudRecordBook srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));

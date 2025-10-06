@@ -84,15 +84,15 @@ public class CRTest {
 
         Random rand = new Random();
         //number_of_students
-        max_passed_sessions_amount = (max_passed_sessions_amount > 10) ? 10 : max_passed_sessions_amount;
+        int max_passed_sessions_amount_dup = (max_passed_sessions_amount > 10) ? 10 : max_passed_sessions_amount;
 
         if (max_passed_sessions_amount % 2 == 1)
         {
-            max_passed_sessions_amount++;
+            max_passed_sessions_amount_dup++;
         }
         else 
         {
-            max_passed_sessions_amount += 2;
+            max_passed_sessions_amount_dup += 2;
         }
 
 
@@ -103,12 +103,16 @@ public class CRTest {
             {
                 writer.write(surname_array[rand.nextInt(surname_array.length)] + "\n"
                 + name_array[rand.nextInt(name_array.length)] + "\n"
-                + second_name_array[rand.nextInt(second_name_array.length)] + "\n"
-                + (rand.nextInt(max_passed_sessions_amount/2) + 1) + " " 
-                + (rand.nextInt(max_number_of_group) + 1) + " " 
-                + (rand.nextInt(max_passed_sessions_amount + 1) + 1) + "\n");
+                + second_name_array[rand.nextInt(second_name_array.length)] + "\n");
+
+
+                // + (rand.nextInt(max_passed_sessions_amount_dup/2) + 1) + " " 
+                // + (rand.nextInt(max_number_of_group) + 1) + " " 
+                // + (rand.nextInt(max_passed_sessions_amount + 1) + 1) + "\n");
                 int num_of_sess = rand.nextInt(max_passed_sessions_amount) + 1;
-                writer.write(num_of_sess + "\n");
+                int num_of_sem = num_of_sess + 1;
+                int year = (num_of_sem + 1) / 2;
+                writer.write(year + " " + (rand.nextInt(max_number_of_group) + 1) + " " + num_of_sem + "\n" + num_of_sess + "\n");
                 for (int j = 0; j < num_of_sess; j++)
                 {
                     int num_of_disc = rand.nextInt(max_discipline_amount_in_sem) + 1;
