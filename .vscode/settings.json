@@ -2,10 +2,11 @@
     "java.project.sourcePaths": [
         "modifiedLab2",
         "modifiedLab1",
+        "lab4",
         "lab3",
         "lab2",
         "lab1",
-        "lab4"
+        "UnIntDiffStud"
     ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
