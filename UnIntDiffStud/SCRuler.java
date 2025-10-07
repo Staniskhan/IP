@@ -1,20 +1,43 @@
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SCRuler {
-    public static void fileOutUnion(StudCollection coll1, StudCollection coll2, String filename)
+    public static StudCollection Union(StudCollection coll1, StudCollection coll2)
     {
-        try (FileWriter writer = new FileWriter(filename))
+        Set<Student> coll = new HashSet<>(coll1.studset);
+        for(Student currstud : coll2.studset)
         {
-            for (int i = 0; i < coll1.studset.size(); i++)
-            {
-                writer.write(coll1.studset.get)
-            }
+            coll.add(currstud);
+        }
+        StudCollection studcol = new StudCollection(coll);
+        return studcol;
+    }
 
-        }
-        catch (IOException e)
+    public static StudCollection Intersection(StudCollection coll1, StudCollection coll2)
+    {
+        Set<Student> coll = new HashSet<>();
+        for(Student currstud : coll2.studset)
         {
-            e.printStackTrace();
+            if (coll1.studset.contains(currstud))
+            {
+                coll.add(currstud);
+            }
         }
+        StudCollection ret = new StudCollection(coll);
+        return ret;
+    }
+
+        public static StudCollection Difference(StudCollection reduced_coll, StudCollection deductible_coll)
+    {
+        Set<Student> coll = new HashSet<>(reduced_coll.studset);
+        for(Student currstud : deductible_coll.studset)
+        {
+            if (coll.contains(currstud))
+            {
+                coll.remove(currstud);
+            }
+        }
+        StudCollection ret = new StudCollection(coll);
+        return ret;
     }
 }
