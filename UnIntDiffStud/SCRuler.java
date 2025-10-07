@@ -27,7 +27,7 @@ public class SCRuler {
         return ret;
     }
 
-        public static StudCollection Difference(StudCollection reduced_coll, StudCollection deductible_coll)
+    public static StudCollection Difference(StudCollection reduced_coll, StudCollection deductible_coll)
     {
         Set<Student> coll = new HashSet<>(reduced_coll.studset);
         for(Student currstud : deductible_coll.studset)

@@ -31,7 +31,10 @@ public class StudCollection {
     }
 
 
-    public StudCollection(){};
+    public StudCollection()
+    {
+        studset = new HashSet<>();
+    };
 
 
     public StudCollection(String filename)
@@ -86,5 +89,10 @@ public class StudCollection {
         {
             e.printStackTrace();
         }
+    }
+
+    public void add(Student currstud)
+    {
+        studset.add(currstud);
     }
 }
