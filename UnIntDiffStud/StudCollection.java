@@ -91,8 +91,59 @@ public class StudCollection {
         }
     }
 
+    public void simpleFileOut(String filename, boolean append)
+    {
+        try (FileWriter writer = new FileWriter(filename, append))
+        {
+            writer.write(studset.size() + "\n");
+            int i = 1;
+            for (Student stud: studset)
+            {
+                writer.write
+                (
+                stud.num + "\n"
+                + stud.name + "\n"
+                + stud.group + "\n"
+                + stud.grade + "\n"
+                );
+                i++;
+            }
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void consoleOut()
+    {
+            int i = 1;
+            for (Student stud: studset)
+            {
+                System.out.print
+                (
+                "-<number " + i + ">-\n"
+                + "ID: " + processID(stud.num) + "\n"
+                + "Name: " + stud.name + "\n"
+                + "Group: " + stud.group + "\n"
+                + "AVG: " + stud.grade + "\n"
+                + "_________________________\n"
+                );
+                i++;
+            }
+    }
+
     public void add(Student currstud)
     {
         studset.add(currstud);
+    }
+
+
+    public void add(StudCollection currsc)
+    {
+        for (Student st : currsc.studset)
+        {
+            studset.add(st);
+        }
     }
 }

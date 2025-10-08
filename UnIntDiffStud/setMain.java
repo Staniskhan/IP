@@ -5,7 +5,7 @@ public class setMain {
 
     private static void waitForKeyPress()
     {
-        System.out.println("To complete the program press enter...");
+        System.out.println("To continue press enter...");
         Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
     }
@@ -54,7 +54,7 @@ public class setMain {
         else if (number_of_menu == 41
         || number_of_menu == 42)
         {
-            System.out.print("1. Collection 1.\n2. Collection 2.\n3. Union.\n4. Intersection.\n5.Difference.");
+            System.out.print("1. Collection 1.\n2. Collection 2.\n3. Union.\n4. Intersection.\n5. Difference.\n");
         }
 
 
@@ -143,19 +143,20 @@ public class setMain {
     private static String addExtension(String filename)
     {
         if (!filename.matches(".*[.]txt")) filename += ".txt";
+        // String ret = "text_files_from_task_on_sets//" + filename;
         return filename;
     }
 
 
-    private static String askFileName()
+    private static String askFileName(String msg)
     {
-        System.out.println();
         Scanner scanner = new Scanner(System.in);
+        System.out.println(msg);
         String filename = scanner.nextLine();
         while(!checkFileName(filename))
         {
             cleanConsole();
-            System.out.println("TRY AGAIN!\nWrite the name of generating file: ");
+            System.out.println("TRY AGAIN!\n" + msg);
             scanner = new Scanner(System.in);
             filename = scanner.nextLine();
         }
@@ -166,7 +167,8 @@ public class setMain {
 
     private static void GenerateFile()
     {
-        String filename = askFileName();
+        cleanConsole();
+        String filename = askFileName("Write the name of generating file: ");
         int num_of_students = askPositiveNZeroInt("Enter the number of students: ");
         int num_of_groups = askPositiveNZeroInt("Enter the number of groups: ");
         FileGenerator.GenerateFile(filename, num_of_students, num_of_groups);
@@ -180,14 +182,22 @@ public class setMain {
             "1. Generate input file of students.\n"
             + "2. Input data to collection.\n"
             + "  2.1. Manually.\n"
+            + "    2.1.1. To collection 1.\n"
+            + "    2.1.2. To collection 2.\n"
             + "  2.2. From the file.\n"
+            + "    2.2.1. To collection 1.\n"
+            + "    2.2.2. To collection 2.\n"
             + "3. Append data.\n"
             + "  3.1. To file.\n"
             + "    3.1.1. Manually.\n"
             + "    3.1.2. From the file.\n"
             + "  3.2. To collection.\n"
             + "    3.2.1. Manually.\n"
+            + "      3.2.1.1. To collection 1.\n"
+            + "      3.2.1.2. To collection 2.\n"
             + "    3.2.2. From the file.\n"
+            + "      3.2.2.1. To collection 1.\n"
+            + "      3.2.2.2. To collection 2.\n"
             + "4. Output.\n"
             + "  4.1. To file.\n"
             + "    4.1.1. Collection 1.\n"
@@ -344,6 +354,29 @@ public class setMain {
         return coll;
     }
 
+
+    private static void addDataToFileManually()
+    {
+        cleanConsole();
+        String filename = askFileName("Write the name of the file: ");
+        StudCollection sc = new StudCollection(filename);
+        sc.add(inputDataToCollectionManually());
+        sc.simpleFileOut(filename, false);
+    }
+
+
+    private static void addDataFromFileToFile()
+    {
+        cleanConsole();
+        String infilename = askFileName("Write the name of the input file: ");
+        cleanConsole();
+        String outfilename = askFileName("Write the name of the output file: ");
+        StudCollection coll_2 = new StudCollection(infilename);
+        StudCollection coll_1 = new StudCollection(outfilename);
+        coll_1.add(coll_2);
+        coll_1.simpleFileOut(outfilename, false);
+    }
+
     public static void main(String args[])
     {
         // FileGenerator.GenerateFile("input_files/input1.txt", 5, 15);
@@ -384,15 +417,15 @@ public class setMain {
                 else if (action == 22) // input data to collection from the file
                 {
                     action = askActionNumber(action);
+                    cleanConsole();
+                    String filename = askFileName("Write the name of the file: ");
                     if (action == 221) // input data to collection 1 from the file
                     {
-                        cleanConsole();
-                        coll1 = new StudCollection(askFileName());
+                        coll1 = new StudCollection(filename);
                     }
                     else if (action == 222) // input data to collection 2 from the file
                     {
-                        cleanConsole();
-                        coll2 = new StudCollection(askFileName());
+                        coll2 = new StudCollection(filename);
                     }
                 }
             }
@@ -401,17 +434,116 @@ public class setMain {
                 action = askActionNumber(action);
                 if (action == 31) // add data to file
                 {
-
+                    action = askActionNumber(action);
+                    if (action == 311) // add data to file manually
+                    {
+                        addDataToFileManually();
+                    }
+                    else if (action == 312) // add data to file from file
+                    {
+                        addDataFromFileToFile();
+                    }
                 }
                 else if (action == 32) // add data to collection
                 {
-                    
+                    action = askActionNumber(action);
+                    if (action == 321) // add data to collection manually
+                    {
+                        action = askActionNumber(action);
+                        int numOfStud = askPositiveNZeroInt("Enter the number of students: ");
+                        if (action == 3211) // add data to collection 1 manually
+                        {
+                            for (int i = 0; i < numOfStud; i++)
+                            {
+                                coll1.add(askStudInf());
+                            }
+                        }
+                        else if (action == 3212) // add data to collection 2 manually
+                        {
+                            for (int i = 0; i < numOfStud; i++)
+                            {
+                                coll1.add(askStudInf());
+                            }
+                        }
+
+                    }
+                    else if (action == 322) // add data to collection from the file
+                    {
+                        action = askActionNumber(action);
+                        cleanConsole();
+                        String filename = askFileName("Enter the name of the input file: ");
+                        StudCollection currsc = new StudCollection(filename);
+                        if (action == 3221) // add data to collection 1 from the file
+                        {
+                            coll1 = SCRuler.Union(coll1, currsc);
+                        }
+                        else if (action == 3222) // add data to collection 2 from the file
+                        {
+                            coll2 = SCRuler.Union(coll1, currsc);
+                        }
+                    }
                 }
 
             }
             else if (action == 4) // output data
             {
-
+                action = askActionNumber(action);
+                if (action == 41) // output to file
+                {
+                    action = askActionNumber(action);
+                    cleanConsole();
+                    String filename = askFileName("Enter the name of the output file: ");
+                    if (action == 421) // collection 1
+                    {
+                        coll1.fileOut(filename, false);
+                    }
+                    else if (action == 422) // collection 2
+                    {
+                        coll1.fileOut(filename, false);
+                    }
+                    else if (action == 423) // Union
+                    {
+                        SCRuler.Union(coll1, coll2).fileOut(filename, false);
+                    }
+                    else if (action == 424) // Intersection
+                    {
+                        SCRuler.Intersection(coll1, coll2).fileOut(filename, false);
+                    }
+                    else if (action == 425) // Difference
+                    {
+                        SCRuler.Difference(coll1, coll2).fileOut(filename, false);
+                    }
+                }
+                else if (action == 42) // output to console
+                {
+                    action = askActionNumber(action);
+                    cleanConsole();
+                    if (action == 421) // collection 1
+                    {
+                        coll1.consoleOut();
+                        waitForKeyPress();
+                    }
+                    else if (action == 422) // collection 2
+                    {
+                        coll1.consoleOut();
+                        waitForKeyPress();
+                    }
+                    else if (action == 423) // Union
+                    {
+                        SCRuler.Union(coll1, coll2).consoleOut();
+                        waitForKeyPress();
+                    }
+                    else if (action == 424) // Intersection
+                    {
+                        SCRuler.Intersection(coll1, coll2).consoleOut();
+                        waitForKeyPress();
+                    }
+                    else if (action == 425) // Difference
+                    {
+                        SCRuler.Difference(coll1, coll2).consoleOut();
+                        waitForKeyPress();
+                    }
+                }
             }
             else if (action == 5) // show the tree of actions
             {
