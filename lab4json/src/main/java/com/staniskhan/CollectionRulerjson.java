@@ -1,3 +1,4 @@
+package com.staniskhan;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -5,6 +6,9 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
 
@@ -41,8 +45,8 @@ y. <surname>                                                                    
 
 
 
-public class CollectionRuler {
-    public static float AVGAllSemsMark(StudRecordBook srb)
+public class CollectionRulerjson {
+    public static float AVGAllSemsMark(StudRecordBookjson srb)
     {
         int[] arr = srb.getAllSemesterMarks();
         int count = arr.length;
@@ -64,7 +68,7 @@ public class CollectionRuler {
         return avg;
     }
 
-    public static float AVGAllExamsMark(StudRecordBook srb)
+    public static float AVGAllExamsMark(StudRecordBookjson srb)
     {
         int[] arr = srb.getAllExamMarks();
         int count = arr.length;
@@ -86,7 +90,7 @@ public class CollectionRuler {
         return avg;
     }
 
-    public static float AVGExamMarks(StudRecordBook srb, int numOfSes)
+    public static float AVGExamMarks(StudRecordBookjson srb, int numOfSes)
     {
         int arr[] = srb.getExamMarks(numOfSes);
         int count = arr.length;
@@ -108,7 +112,7 @@ public class CollectionRuler {
         return avg;
     }
 
-    public static float AVGSemMarks(StudRecordBook srb, int numOfSem)
+    public static float AVGSemMarks(StudRecordBookjson srb, int numOfSem)
     {
         int arr[] = srb.getSemMarks(numOfSem);
         int count = arr.length;
@@ -130,7 +134,7 @@ public class CollectionRuler {
         return avg;
     }
 
-    public static float AVG(StudRecordBook srb)
+    public static float AVG(StudRecordBookjson srb)
     {
         int[] arr1 = srb.getAllSemesterMarks();
         int[] arr2 = srb.getAllExamMarks();
@@ -171,9 +175,9 @@ public class CollectionRuler {
 
 
     int number_of_students;
-    Vector<StudRecordBook> students;
+    Vector<StudRecordBookjson> students;
 
-    public CollectionRuler (String filename)
+    public CollectionRulerjson (String filename)
     {
         try
         {
@@ -207,7 +211,7 @@ public class CollectionRuler {
                             args += " ";
                         }
                     }
-                    StudRecordBook srb_curr = new StudRecordBook(surname, name, second_name, year, group, semester, args);
+                    StudRecordBookjson srb_curr = new StudRecordBookjson(surname, name, second_name, year, group, semester, args);
                     students.addElement(srb_curr);
                 }
             }
@@ -360,7 +364,7 @@ public class CollectionRuler {
             {
                 if (AVG(students.get(j - 1)) > AVG(students.get(j)))
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
@@ -377,7 +381,7 @@ public class CollectionRuler {
             {
                 if (AVG(students.get(j - 1)) < AVG(students.get(j)))
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
@@ -396,7 +400,7 @@ public class CollectionRuler {
                 String str2 = students.get(j).surname + " " + students.get(j).name + " " + students.get(j).second_name;
                 if (str1.compareTo(str2) > 0)
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
@@ -415,7 +419,7 @@ public class CollectionRuler {
                 String str2 = students.get(j).surname + " " + students.get(j).name + " " + students.get(j).second_name;
                 if (str2.compareTo(str1) > 0)
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
@@ -432,13 +436,13 @@ public class CollectionRuler {
             {
                 if (students.get(j - 1).year > students.get(j).year)
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
                 else if ((students.get(j - 1).year == students.get(j).year) && (students.get(j - 1).group > students.get(j).group))
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
@@ -455,17 +459,33 @@ public class CollectionRuler {
             {
                 if (students.get(j - 1).year < students.get(j).year)
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
                 else if ((students.get(j - 1).year == students.get(j).year) && (students.get(j - 1).group < students.get(j).group))
                 {
-                    StudRecordBook srb = students.get(j - 1);
+                    StudRecordBookjson srb = students.get(j - 1);
                     students.set(j - 1, students.get(j));
                     students.set(j, srb);
                 }
             }
+        }
+    }
+
+
+    public void AllInfToJson(String filename)
+    {
+        CollectionRulerjson cr = this;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try (FileWriter writer = new FileWriter(filename))
+        {
+            gson.toJson(cr, writer);
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
         }
     }
 }

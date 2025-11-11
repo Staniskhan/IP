@@ -1,15 +1,14 @@
 {
     "java.project.sourcePaths": [
-        "modifiedLab2",
-        "modifiedLab1",
+        "lab4json",
         "lab4",
-        "lab3",
         "lab2",
-        "lab1",
-        "UnIntDiffStud"
+        "UnIntDiffStud",
+        "lab1"
     ],
-    "java.project.outputPath": "bin",
+
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
-    ]
+        "libs/**/*.jar"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

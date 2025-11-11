@@ -1,0 +1,23 @@
+{
+  "surname": "123",
+  "name": "321",
+  "second_name": "123",
+  "year": 1,
+  "group": 2,
+  "semester": 1,
+  "number_of_passed_sessions": 1,
+  "sessions": [
+    {
+      "number": 1,
+      "number_of_disciplines": 1,
+      "disciplines": [
+        {
+          "disciplineName": "ova",
+          "semesterMark": 9,
+          "testMark": 1,
+          "examMark": 9
+        }
+      ]
+    }
+  ]
+}
