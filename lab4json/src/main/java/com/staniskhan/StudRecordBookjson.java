@@ -10,18 +10,20 @@ public class StudRecordBookjson
     //=============================================================================================================================
     //                                                      CLASS SESSION
     //VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-    private class Session
+    public static class Session
     {
         //====================================================================================================================
         //                                                  CLASS DISCIPLINE
         //VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-        public class discipline
+        public static class discipline
         {
-            String disciplineName;
+            public String disciplineName;
             // -2 if there is no exam or test on that discipline, -1 if there is no mark on this test or exam yet
-            int semesterMark;
-            int testMark;
-            int examMark;
+            public int semesterMark;
+            public int testMark;
+            public int examMark;
+
+            public discipline() {}
         }
         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         //                                                  CLASS DISCIPLINE
@@ -32,15 +34,17 @@ public class StudRecordBookjson
         //-----------------------------
         // fields of the class Session
         //VVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-        int number;
-        int number_of_disciplines;
-        Vector<discipline> disciplines = new Vector<>();
+        public int number;
+        public Vector<discipline> disciplines = new Vector<>();
+        public int number_of_disciplines;
         //=============================
 
 
         //-----------------------------
         // methods of the class Session
         //VVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+        public Session() {}
+
         public Session(String args)
         {
             StringTokenizer strtok = new StringTokenizer(args, "\s+");
@@ -188,18 +192,18 @@ public class StudRecordBookjson
 
 
 
-    String surname;
-    String name;
-    String second_name;
-    int year;
-    int group;
-    int semester;
-    int number_of_passed_sessions;
+    public String surname;
+    public String name;
+    public String second_name;
+    public int year;
+    public int group;
+    public int semester;
     public Vector<Session> sessions;
+    public int number_of_passed_sessions;
     
 
 
-    
+    public StudRecordBookjson() {}
 
     public StudRecordBookjson(String _surname, String _name, String _second_name, int _year, int _group, int _semester, String args) 
     // args: <number_of_passed_sessions> <number_of_disciplines_in_1-st_sem> <1-st_discipline_name> <1-st_

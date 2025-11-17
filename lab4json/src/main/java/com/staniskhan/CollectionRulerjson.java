@@ -1,14 +1,13 @@
 package com.staniskhan;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.lang.reflect.Type;
 import java.util.Vector;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 
 
@@ -177,181 +176,182 @@ public class CollectionRulerjson {
     int number_of_students;
     Vector<StudRecordBookjson> students;
 
-    public CollectionRulerjson (String filename)
-    {
-        try
-        {
+    public CollectionRulerjson(String filename) {
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            FileReader reader = new FileReader(filename);
+            
+            Type collectionType = new TypeToken<Vector<StudRecordBookjson>>(){}.getType();
+            students = gson.fromJson(reader, collectionType);
+            
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("OOPS! SMTH WENT WRONG. HERE'S THE DESCRIPTION OF THE EXCEPTION:");
+            e.printStackTrace();
             students = new Vector<>();
-            try
-            {
-                File file = new File(filename);
-                Scanner fileScanner = new Scanner(file);
-                number_of_students = Integer.parseInt(fileScanner.nextLine());
-
-                for (int i = 0; i < number_of_students; i++)
-                {
-                    String surname = fileScanner.nextLine();
-                    String name = fileScanner.nextLine();
-                    String second_name = fileScanner.nextLine();
-                    StringTokenizer strtok = new StringTokenizer(fileScanner.nextLine(), "\s+");
-                    int year = Integer.parseInt(strtok.nextToken());
-                    int group = Integer.parseInt(strtok.nextToken());
-                    int semester = Integer.parseInt(strtok.nextToken());
-                    String args = fileScanner.nextLine();
-                    int num_of_passed_sessions = Integer.parseInt(args);
-                    args += " ";
-                    for (int a = 0; a < num_of_passed_sessions; a++)
-                    {
-                        String num_of_dis_str = fileScanner.nextLine();
-                        args += num_of_dis_str + " ";
-                        int num_of_disciplines = Integer.parseInt(num_of_dis_str);
-                        for (int b = 0; b < 4 * num_of_disciplines; b++)
-                        {
-                            args += fileScanner.nextLine();
-                            args += " ";
-                        }
-                    }
-                    StudRecordBookjson srb_curr = new StudRecordBookjson(surname, name, second_name, year, group, semester, args);
-                    students.addElement(srb_curr);
-                }
-            }
-            catch(FileNotFoundException e)
-            {
-                System.out.println("\nFILE NOT FOUND\n");
-                e.printStackTrace();
-            }
         }
-        catch (Exception e)
-        {
-            System.out.println("OOPS! SMTH WENT WRONG. HERE'S THE DISCRIPTION OF THE EXCEPTION:");
-            e.printStackTrace();
-        }
-
-
+        number_of_students = students.size();
     }
 
-
-    public void fileOutAllInformation(String filename)
-    {
-        try(FileWriter writer = new FileWriter(filename))
-        {
-            writer.write("number of students: " + number_of_students
-            + "\n\n"
-            + "* \"no\" means that there is no exam/test/semester mark\n"
-            + "* \"-\" means incomplete\n"
-            + "* \"+\" means complete\n\n");
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        for (int i = 0; i < number_of_students; i++)
-        {
-            students.get(i).fileOut(filename);
-        }
-    }
-
-
-    public void fileOutNames(String filename)
-    {
-        try(FileWriter writer = new FileWriter(filename))
-        {
-            writer.write("number of students: " + number_of_students + "\n\n");
-            for (int i = 0; i < number_of_students; i++)
-            {
-                writer.write((i + 1) + ". " + students.get(i).surname + " " + students.get(i).name + " " + students.get(i).second_name + "\n");
-            }
-        }
-        catch(IOException e)
-        {
+    public void fileOutAllInformation(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(students, writer);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    
+    private static class StudentName {
+        int number;
+        String surname;
+        String name;
+        String second_name;
 
-    public void fileOutAVG(String filename)
-    {
-        try(FileWriter writer = new FileWriter(filename))
-        {
-            writer.write("number of students: " + number_of_students + "\n\n");
-            for (int i = 0; i < number_of_students; i++)
-            {
-                writer.write((i + 1) + ".\t" + students.get(i).surname + " " + students.get(i).name + " " + students.get(i).second_name + "\n\t"  
-                + "AVG: " + AVG(students.get(i)) + "\n");
-            }
+        StudentName(int number, String surname, String name, String second_name) {
+            this.number = number;
+            this.surname = surname;
+            this.name = name;
+            this.second_name = second_name;
         }
-        catch(IOException e)
-        {
+    }
+
+    public void fileOutNames(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            
+            Vector<StudentName> names = new Vector<>();
+            for (int i = 0; i < students.size(); i++) {
+                StudRecordBookjson student = students.get(i);
+                names.add(new StudentName(i + 1, student.surname, student.name, student.second_name));
+            }
+            
+            gson.toJson(names, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static class StudentAvg {
+        int number;
+        String surname;
+        String name;
+        String second_name;
+        float avg;
+
+        StudentAvg(int number, String surname, String name, String second_name, float avg) {
+            this.number = number;
+            this.surname = surname;
+            this.name = name;
+            this.second_name = second_name;
+            this.avg = avg;
+        }
+    }
+
+    public void fileOutAVG(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            
+            Vector<StudentAvg> avgs = new Vector<>();
+            for (int i = 0; i < students.size(); i++) {
+                StudRecordBookjson student = students.get(i);
+                avgs.add(new StudentAvg(i + 1, student.surname, student.name, 
+                                       student.second_name, AVG(student)));
+            }
+            
+            gson.toJson(avgs, writer);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private static class StudentSemAvg {
+        int number;
+        String surname;
+        String name;
+        String second_name;
+        float semAvg;
 
-    public void fileOutSemAVG(String filename, int num_of_sem)
-    {
-        try(FileWriter writer = new FileWriter(filename))
-        {
-            writer.write("number of students: " + number_of_students + "\n\nnumber of semester: " + num_of_sem + "\n\n");
-            for (int i = 0; i < number_of_students; i++)
-            {
-                writer.write((i + 1) + ".\t" + students.get(i).surname + " " + students.get(i).name + " " + students.get(i).second_name + "\n\t"  
-                + "AVG: " + ((AVGSemMarks(students.get(i), num_of_sem) + AVGExamMarks(students.get(i), num_of_sem)) / 2) + "\n");
-            }
+        StudentSemAvg(int number, String surname, String name, String second_name, float semAvg) {
+            this.number = number;
+            this.surname = surname;
+            this.name = name;
+            this.second_name = second_name;
+            this.semAvg = semAvg;
         }
-        catch(IOException e)
-        {
+    }
+
+
+    public void fileOutSemAVG(String filename, int num_of_sem) {
+    try (FileWriter writer = new FileWriter(filename)) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
+        Vector<StudentSemAvg> semAvgs = new Vector<>();
+        for (int i = 0; i < number_of_students; i++) {
+            StudRecordBookjson student = students.get(i);
+            float semAvg = (AVGSemMarks(student, num_of_sem) + AVGExamMarks(student, num_of_sem)) / 2;
+            semAvgs.add(new StudentSemAvg(i + 1, student.surname, student.name, 
+                                        student.second_name, semAvg));
+        }
+        
+        gson.toJson(semAvgs, writer);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    public void fileOutExcellentStudentsAllInf(String filename)
-    {
-        for (int i = 0; i < number_of_students; i++)
-        {
-            if (students.get(i).isExcellentStudent())
-            {
-                students.get(i).fileOut(filename);
+    public void fileOutExcellentStudentsAllInf(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
+            Vector<StudRecordBookjson> excellentStudents = new Vector<>();
+            for (int i = 0; i < number_of_students; i++) {
+                if (students.get(i).isExcellentStudent()) {
+                    excellentStudents.add(students.get(i));
+                }
             }
+        
+            gson.toJson(excellentStudents, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-
-    public void fileOutExcellentStudentsNames(String filename)
-    {
-        for (int i = 0; i < number_of_students; i++)
-        {
-            if (students.get(i).isExcellentStudent())
-            {
-                try(FileWriter writer = new FileWriter(filename))
-                {
-                    writer.write(students.get(i).surname + " " + students.get(i).name + " " + students.get(i).second_name + "\n");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
+    public void fileOutExcellentStudentsNames(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
+            Vector<StudentName> excellentNames = new Vector<>();
+            for (int i = 0; i < number_of_students; i++) {
+                if (students.get(i).isExcellentStudent()) {
+                    StudRecordBookjson student = students.get(i);
+                    excellentNames.add(new StudentName(0, student.surname, student.name, student.second_name));
                 }
             }
+        
+            gson.toJson(excellentNames, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-
-    public void fileOutExcellentStudentsAVG(String filename)
-    {
-        for (int i = 0; i < number_of_students; i++)
-        {
-            if (students.get(i).isExcellentStudent())
-            {
-                try(FileWriter writer = new FileWriter(filename))
-                {
-                    writer.write(students.get(i).surname + " " + students.get(i).name + " " + students.get(i).second_name + "  /==/  AVG: " + AVG(students.get(i)) + "\n");
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
+    public void fileOutExcellentStudentsAVG(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
+            Vector<StudentAvg> excellentAvgs = new Vector<>();
+            for (int i = 0; i < number_of_students; i++) {
+                if (students.get(i).isExcellentStudent()) {
+                    StudRecordBookjson student = students.get(i);
+                    excellentAvgs.add(new StudentAvg(0, student.surname, student.name, 
+                                                   student.second_name, AVG(student)));
                 }
             }
+        
+            gson.toJson(excellentAvgs, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

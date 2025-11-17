@@ -2,6 +2,10 @@ package com.staniskhan;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Vector;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 // The format of the input File
 // * "-2" means that there is no exam/test/semester mark
@@ -78,56 +82,49 @@ public class CRTestjson {
         //number_of_students
         max_passed_sessions_amount = (max_passed_sessions_amount > 10) ? 10 : max_passed_sessions_amount;
 
+        Vector<StudRecordBookjson> students = new Vector<>();
 
-
-        try (FileWriter writer = new FileWriter(filename))                 // +true
-        {
-            writer.write(students_amount + "\n");
-            for (int i = 0; i < students_amount; i++)
-            {
-                writer.write(surname_array[rand.nextInt(surname_array.length)] + "\n"
-                + name_array[rand.nextInt(name_array.length)] + "\n"
-                + second_name_array[rand.nextInt(second_name_array.length)] + "\n");
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (int i = 0; i < students_amount; i++) {
+                String surname = surname_array[rand.nextInt(surname_array.length)];
+                String name = name_array[rand.nextInt(name_array.length)];
+                String second_name = second_name_array[rand.nextInt(second_name_array.length)];
+                
                 int num_of_sess = rand.nextInt(max_passed_sessions_amount) + 1;
                 int num_of_sem = num_of_sess + 1;
                 int year = (num_of_sem + 1) / 2;
-                writer.write(year + " " + (rand.nextInt(max_number_of_group) + 1) + " " + num_of_sem + "\n" + num_of_sess + "\n");
-                for (int j = 0; j < num_of_sess; j++)
-                {
+                int group = rand.nextInt(max_number_of_group) + 1;
+                
+                StringBuilder argsBuilder = new StringBuilder();
+                argsBuilder.append(num_of_sess).append(" ");
+                
+                for (int j = 0; j < num_of_sess; j++) {
                     int num_of_disc = rand.nextInt(max_discipline_amount_in_sem) + 1;
-                    writer.write(num_of_disc + "\n");
-                    for (int k = 0; k < num_of_disc; k++)
-                    {
-                        writer.write(disciplines_array[rand.nextInt(disciplines_array.length)] + "\n");
+                    argsBuilder.append(num_of_disc).append(" ");
+                    
+                    for (int k = 0; k < num_of_disc; k++) {
+                        argsBuilder.append(disciplines_array[rand.nextInt(disciplines_array.length)]).append(" ");
+                        
                         int sem_mark = rand.nextInt(13) - 2;
-                        if (sem_mark == -1)
-                        {
-                            sem_mark--;
-                        }
+                        if (sem_mark == -1) sem_mark--;
                         int test_mark = rand.nextInt(4) - 2;
-                        if (test_mark == -1)
-                        {
-                            test_mark--;
-                        }
+                        if (test_mark == -1) test_mark--;
                         int exam_mark = rand.nextInt(13) - 2;
-                        if (exam_mark == -1)
-                        {
-                            exam_mark--;
-                        }
-                        writer.write(sem_mark + "\n" + test_mark + "\n" + exam_mark + "\n");
+                        if (exam_mark == -1) exam_mark--;
+                        
+                        argsBuilder.append(sem_mark).append(" ").append(test_mark).append(" ").append(exam_mark).append(" ");
                     }
                 }
+                
+                StudRecordBookjson student = new StudRecordBookjson(surname, name, second_name, year, group, num_of_sem, argsBuilder.toString());
+                students.add(student);
             }
-        }
-        catch (IOException e)
-        {
+            
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(students, writer);
+            
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        CollectionRulerjson cr = new CollectionRulerjson(filename);
-        cr.
-        cr.AllInfToJson(filename);
-
     }
 }
