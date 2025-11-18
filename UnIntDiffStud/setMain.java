@@ -379,15 +379,6 @@ public class setMain {
 
     public static void main(String args[])
     {
-        // FileGenerator.GenerateFile("input_files/input1.txt", 5, 15);
-        // FileGenerator.GenerateFile("input_files/input2.txt", 5, 15);
-        // StudCollection coll1 = new StudCollection("input_files/input1.txt");
-        // StudCollection coll2 = new StudCollection("input_files/input2.txt");
-        // SCRuler.Union(coll1, coll2).fileOut("output_files/output_union.txt", false);
-        // SCRuler.Intersection(coll1, coll2).fileOut("output_files/output_intersection.txt", false);
-        // SCRuler.Difference(coll1, coll2).fileOut("output_files/output_difference.txt", false);
-
-        
         StudCollection coll1 = new StudCollection();
         StudCollection coll2 = new StudCollection();
         while(true)

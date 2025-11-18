@@ -266,7 +266,7 @@ public class App extends Application {
     }
     
     private void loadDataFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("input.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("input_files/input.txt"))) {
             String line;
             boolean readingGifts = false;
             String currentCongratulator = null;

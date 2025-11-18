@@ -5,7 +5,7 @@ public class lab3 {
     {
         int count = 0;
         Text text = new Text();
-        text.enterTextFromFile("input.txt");
+        text.enterTextFromFile("input_files/input.txt");
         for (int i = 0; i < text.size(); i++)
         {
             StringTokenizer strtok = new StringTokenizer(text.get(i), "\s+,.!?/\\|()[]{}<>:;\"\'");
