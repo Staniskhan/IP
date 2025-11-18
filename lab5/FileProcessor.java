@@ -76,16 +76,21 @@ public class FileProcessor {
             Vector<String> words = new Vector<>();
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                if (line.startsWith(" ") && !words.isEmpty())
+                if ((line.startsWith(" ") || line.startsWith("\t")) && !words.isEmpty())
                 {
                     text.add(paragraphStr(words));
                     words.clear();
                 }
-                String[] lineWords = line.split("\\s+");
+                String[] lineWords = line.trim().split("\\s+");
                 for (int i = 0; i < lineWords.length; i++)
                 {
                     words.add(lineWords[i]);
                 }
+            }
+            if (!words.isEmpty())
+            {
+                text.add(paragraphStr(words));
+                words.clear();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -110,7 +115,6 @@ public class FileProcessor {
         int number_of_words = 1;
         String par = "\t";
 
-
         while(!words.isEmpty())
         {
 
@@ -132,7 +136,7 @@ public class FileProcessor {
 
             par += words.get(0);
             words.remove(0);
-            for (int i = 0; i < number_of_words && i < words.size(); i++)
+            for (int i = 1; i < number_of_words && words.size() > 0; i++)
             {
                 par += ws + words.get(0);
                 words.remove(0);
@@ -144,9 +148,6 @@ public class FileProcessor {
             }
             number_of_words = 1;
         }
-
-
-
         return par;
     }
 }
