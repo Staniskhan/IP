@@ -111,7 +111,7 @@ public class FileProcessor {
 
     private String paragraphStr(Vector<String> words)
     {
-        int len = words.get(0).length() + 4;                            // +4?
+        int len = words.get(0).length() + 4;
         int number_of_words = 1;
         String par = "\t";
 
@@ -123,6 +123,21 @@ public class FileProcessor {
                 len += 1 + words.get(number_of_words).length();
                 number_of_words++;
             }
+
+            if (number_of_words == words.size())
+            {
+                par += words.get(0);
+                words.remove(0);
+                for (int i = 1; i < number_of_words && words.size() > 0; i++)
+                {
+                    par += " " + words.get(0);
+                    words.remove(0);
+                }
+                par += "\n";
+                break;
+            }
+
+
             int size_of_ws = 0;
             if (number_of_words > 1)
             {
@@ -134,10 +149,16 @@ public class FileProcessor {
                 ws += " ";
             }
 
+            int extra = width - len - ((size_of_ws - 1) * (number_of_words - 1));
             par += words.get(0);
             words.remove(0);
             for (int i = 1; i < number_of_words && words.size() > 0; i++)
             {
+                if (extra > 0)
+                {
+                    par += " ";
+                    extra--;
+                }
                 par += ws + words.get(0);
                 words.remove(0);
             }
