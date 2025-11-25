@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,7 +21,7 @@ public class SortingVisualizer extends Application {
     private double width = 900;
     private double height = 500;
     private double spacing = 10;
-    private double delay = 100;
+    private int delay = 50;
 
     private ArrayList<Integer> originalNumbers;
     private Pane bubbleSortPane;
@@ -32,7 +33,7 @@ public class SortingVisualizer extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setResizable(false);
         // Чтение чисел из файла
-        originalNumbers = readNumbersFromFile("input.txt");
+        originalNumbers = readNumbersFromFile("input_files/input.txt");
         if (originalNumbers.isEmpty()) {
             System.out.println("Файл пуст или не найден");
             return;
@@ -109,32 +110,27 @@ public class SortingVisualizer extends Application {
         updateBars(quickSortPane, quickNumbers);
 
         // Запускаем сортировки
-        // Runnable bubbleSort = ()->{
-        //     startBubbleSort(bubbleSortPane, bubbleNumbers);
-        // };
-        // Thread b = new Thread(bubbleSort);
-        // b.start();
+        Thread b = new Thread(() -> {
+            startBubbleSort(bubbleNumbers);
+        });
+        b.setDaemon(true);
+        b.start();
 
-        // Runnable insertionSort = ()->{
-        //     startInsertionSort(insertionSortPane, insertionNumbers);
-        // };
-        // Thread i = new Thread(insertionSort);
-        // i.start();
+        Thread i = new Thread(() -> {
+        startInsertionSort(insertionNumbers);
+        });
+        i.setDaemon(true);
+        i.start();
 
-        // Runnable quickSort = ()->{
-        //     startQuickSort(quickSortPane, quickNumbers);
-        // };
-
-        // Thread q = new Thread(quickSort);
-
-        // q.start();
-        
-        startBubbleSort(bubbleNumbers);
-        // startInsertionSort(insertionSortPane, insertionNumbers);
-        // startQuickSort(quickSortPane, quickNumbers);
+        Thread q = new Thread(() -> {
+        startQuickSort(quickNumbers);
+        });
+        q.setDaemon(true);
+        q.start();
     }
 
     private void updateBars(Pane pane, ArrayList<Integer> numbers) {
+        Platform.runLater(() -> {
         pane.getChildren().clear();
         double barWidth = pane.getPrefWidth() / numbers.size();
         double maxValue = numbers.stream().max(Integer::compareTo).orElse(1);
@@ -150,6 +146,7 @@ public class SortingVisualizer extends Application {
             bar.setFill(Color.BLUE);
             pane.getChildren().add(bar);
         }
+        });
     }
 
     private void startBubbleSort(ArrayList<Integer> numbers) {
@@ -162,32 +159,109 @@ public class SortingVisualizer extends Application {
                     int swap = numbers.get(j);
                     numbers.set(j, numbers.get(j-1));
                     numbers.set(j - 1, swap);
+                    updateBars(bubbleSortPane, numbers);
                     try
                     {
-                        Thread.sleep(300);
+                        Thread.sleep(delay);
                     }
                     catch(InterruptedException e)
                     {
                         e.printStackTrace();
                     }
-                    updateBars(bubbleSortPane, numbers);
                 }
             }
         }
     }
 
-    // private void startInsertionSort(Pane pane, List<Integer> numbers) {
-        
+    private void startInsertionSort(ArrayList<Integer> numbers) 
+    {
+        for (int i = numbers.size() - 2; i >= 0; i--)
+        {
+            int ind = i;
+            for (int j = i + 1; j < numbers.size(); j++)
+            {
+                if (numbers.get(j) >= numbers.get(i))
+                {
+                    j = numbers.size();
+                }
+                else
+                {
+                    ind++;
+                }
+            }
+            if (ind != i)
+            {
+                int el = numbers.get(i);
+                for (int j = i; j < ind; j++)
+                {
+                    numbers.set(j, numbers.get(j + 1));
+                }
+                numbers.set(ind, el);
+                updateBars(insertionSortPane, numbers);
+                try
+                {
+                    Thread.sleep(delay);
+                }
+                catch(InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
-    // }
+    private void startQuickSort(ArrayList<Integer> numbers) 
+    {
+        qs(numbers, 0, numbers.size() - 1);
+    }
 
-    // private void startQuickSort(Pane pane, List<Integer> numbers) {
+    private void qs(ArrayList<Integer> numbers, int low, int high)
+    {
+        if (low < high)
+        {
+            int pivot = partition(numbers, low, high);
+            qs(numbers, low, pivot - 1);
+            qs(numbers, pivot + 1, high);
+        }
+    }
 
-    // }
-
-    // private int partition(List<Integer> numbers, int low, int high) {
-
-    // }
+    private int partition(ArrayList<Integer> numbers, int low, int high) 
+    {
+        int x = numbers.get(low);
+        int pivot = low;
+        for (int i = pivot + 1; i <= high; i++)
+        {
+            if (numbers.get(i) < x)
+            {
+                pivot++;
+                int swap = numbers.get(pivot);
+                numbers.set(pivot, numbers.get(i));
+                numbers.set(i, swap);
+                updateBars(quickSortPane, numbers);
+                try
+                {
+                    Thread.sleep(delay);
+                }
+                catch(InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        int swap = numbers.get(low);
+        numbers.set(low, numbers.get(pivot));
+        numbers.set(pivot, swap);
+        updateBars(quickSortPane, numbers);
+        try
+        {
+            Thread.sleep(delay);
+        }
+        catch(InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        return pivot;
+    }
 
     public static void main(String[] args) {
         launch(args);
