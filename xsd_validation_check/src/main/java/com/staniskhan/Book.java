@@ -1,19 +1,25 @@
 package com.staniskhan;
 
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-public class Book {
-    private final IntegerProperty id;
-    private final StringProperty title;
-    private final StringProperty author;
-    private final IntegerProperty year;
-    private final DoubleProperty price;
-    private final StringProperty category;
-    private final IntegerProperty amount;
-    private final IntegerProperty realAmount;
+public class Book 
+{
+    private IntegerProperty id;
+    private StringProperty title;
+    private StringProperty author;
+    private IntegerProperty year;
+    private DoubleProperty price;
+    private StringProperty category;
+    private IntegerProperty amount;
+    private IntegerProperty realAmount;
 
-    public Book(int id, String title, String author, int year, double price, 
-                String category, int amount, int realAmount) {
+    public Book(int id, String title, String author, int year, double price, String category, int amount, int realAmount) 
+    {
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
@@ -24,7 +30,6 @@ public class Book {
         this.realAmount = new SimpleIntegerProperty(realAmount);
     }
 
-    // Геттеры и сеттеры
     public int getId() { return id.get(); }
     public void setId(int id) { this.id.set(id); }
     public IntegerProperty idProperty() { return id; }
