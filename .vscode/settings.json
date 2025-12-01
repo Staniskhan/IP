@@ -1,12 +1,13 @@
 {
     "java.project.sourcePaths": [
+        "test",
+        "lab5",
         "lab4json",
         "lab4",
         "lab2",
         "lab1",
         "UnIntDiffStud",
-        "lab5",
-        "test"
+        "xsd/src/main/java/com/staniskhan"
     ],
 
     "java.project.referencedLibraries": [
