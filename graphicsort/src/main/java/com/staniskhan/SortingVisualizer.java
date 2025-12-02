@@ -32,38 +32,31 @@ public class SortingVisualizer extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setResizable(false);
-        // Чтение чисел из файла
         originalNumbers = readNumbersFromFile("input_files/input.txt");
         if (originalNumbers.isEmpty()) {
             System.out.println("Файл пуст или не найден");
             return;
         }
 
-        // Создание заголовков
         Label bubbleLabel = new Label("Bubble sort");
         Label insertionLabel = new Label("Insertion sort");
         Label quickLabel = new Label("Quick sort");
 
-        // Создание панелей для визуализации
         bubbleSortPane = createSortingPane();
         insertionSortPane = createSortingPane();
         quickSortPane = createSortingPane();
 
-        // Инициализация столбцов
         updateBars(bubbleSortPane, originalNumbers);
         updateBars(insertionSortPane, originalNumbers);
         updateBars(quickSortPane, originalNumbers);
 
-        // Создание контейнеров для каждой сортировки
         VBox bubbleBox = new VBox(5, bubbleLabel, bubbleSortPane);
         VBox insertionBox = new VBox(5, insertionLabel, insertionSortPane);
         VBox quickBox = new VBox(5, quickLabel, quickSortPane);
 
-        // Кнопка запуска
         startButton = new Button("Запуск сортировки");
         startButton.setOnAction(e -> startSorting());
 
-        // Основной layout
         HBox sortingPanes = new HBox(spacing);
         sortingPanes.getChildren().addAll(bubbleBox, insertionBox, quickBox);
 
@@ -99,17 +92,14 @@ public class SortingVisualizer extends Application {
     private void startSorting() {
         startButton.setDisable(true);
         
-        // Создаем копии данных для каждой сортировки
         ArrayList<Integer> bubbleNumbers = new ArrayList<>(originalNumbers);
         ArrayList<Integer> insertionNumbers = new ArrayList<>(originalNumbers);
         ArrayList<Integer> quickNumbers = new ArrayList<>(originalNumbers);
 
-        // Переинициализируем столбцы
         updateBars(bubbleSortPane, bubbleNumbers);
         updateBars(insertionSortPane, insertionNumbers);
         updateBars(quickSortPane, quickNumbers);
 
-        // Запускаем сортировки
         Thread b = new Thread(() -> {
             startBubbleSort(bubbleNumbers);
         });
