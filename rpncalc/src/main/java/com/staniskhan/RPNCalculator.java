@@ -25,7 +25,6 @@ public class RPNCalculator extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("RPN Calculator");
 
-        // Create UI components
         inputField = new TextField();
         inputField.setPromptText("Enter expression here...");
         inputField.setStyle("-fx-font-size: 16;");
@@ -42,7 +41,6 @@ public class RPNCalculator extends Application {
         rpnArea.setPrefHeight(60);
         rpnArea.setPromptText("RPN notation will be shown here...");
 
-        // Create number buttons
         Button[] numberButtons = new Button[10];
         for (int i = 0; i < 10; i++) {
             numberButtons[i] = new Button(String.valueOf(i));
@@ -52,7 +50,6 @@ public class RPNCalculator extends Application {
             numberButtons[i].setStyle("-fx-font-size: 16;");
         }
 
-        // Create operator buttons
         Button plusBtn = createOperatorButton("+");
         Button minusBtn = createOperatorButton("-");
         Button multiplyBtn = createOperatorButton("*");
@@ -85,34 +82,28 @@ public class RPNCalculator extends Application {
         equalsBtn.setPrefSize(50, 50);
         equalsBtn.setOnAction(e -> calculate());
 
-        // Create number pad
         GridPane numberPad = new GridPane();
         numberPad.setHgap(5);
         numberPad.setVgap(5);
         numberPad.setPadding(new Insets(10));
         
-        // Add numbers 1-9
         for (int i = 1; i <= 9; i++) {
             numberPad.add(numberButtons[i], (i - 1) % 3, (i - 1) / 3);
         }
         
-        // Add 0 and other buttons in the last row
         numberPad.add(numberButtons[0], 0, 3);
         numberPad.add(decimalBtn, 1, 3);
         numberPad.add(equalsBtn, 2, 3);
 
-        // Create operator panel
         VBox operatorPanel = new VBox(5);
         operatorPanel.setPadding(new Insets(10));
         operatorPanel.getChildren().addAll(plusBtn, minusBtn, multiplyBtn, divideBtn, 
                                          leftParenBtn, rightParenBtn, clearBtn, backspaceBtn);
 
-        // Create input/output areas
         VBox ioPanel = new VBox(10);
         ioPanel.setPadding(new Insets(10));
         ioPanel.getChildren().addAll(inputField, outputArea, rpnArea);
 
-        // Main layout
         HBox mainPanel = new HBox(10);
         mainPanel.setPadding(new Insets(10));
         mainPanel.getChildren().addAll(numberPad, operatorPanel);
@@ -121,7 +112,6 @@ public class RPNCalculator extends Application {
         root.setTop(ioPanel);
         root.setCenter(mainPanel);
 
-        // Handle Enter key in input field
         inputField.setOnAction(e -> calculate());
 
         Scene scene = new Scene(root, 500, 500);
@@ -163,7 +153,7 @@ public class RPNCalculator extends Application {
     private String convertToRPN(String expression) throws Exception {
         StringBuilder output = new StringBuilder();
         Stack<Character> stack = new Stack<>();
-        boolean lastWasOperator = true; // For unary operators
+        boolean lastWasOperator = true;
         
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
@@ -173,7 +163,6 @@ public class RPNCalculator extends Application {
             }
             
             if (Character.isDigit(c) || c == '.') {
-                // Read the entire number
                 while (i < expression.length() && 
                        (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
                     output.append(expression.charAt(i));
