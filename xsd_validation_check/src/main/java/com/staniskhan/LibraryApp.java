@@ -118,30 +118,30 @@ public class LibraryApp extends Application {
         System.exit(1);
     }
 
-    private void loadBooksFromXML() throws Exception {
-        books.clear();
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(new File(xmlPath));
-        doc.getDocumentElement().normalize();
+private void loadBooksFromXML() throws Exception {
+    books.clear();
+    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+    Document doc = dBuilder.parse(new File(xmlPath));
+    doc.getDocumentElement().normalize();
+    
+    NodeList nodeList = doc.getElementsByTagName("book");
+    
+    for (int i = 0; i < nodeList.getLength(); i++) {
+        Element element = (Element) nodeList.item(i);
         
-        NodeList nodeList = doc.getElementsByTagName("book");
+        int id = Integer.parseInt(element.getAttribute("id"));
+        String title = element.getElementsByTagName("title").item(0).getTextContent();
+        String author = element.getElementsByTagName("author").item(0).getTextContent();
+        int year = Integer.parseInt(element.getElementsByTagName("year").item(0).getTextContent());
+        double price = Double.parseDouble(element.getElementsByTagName("price").item(0).getTextContent());
+        String category = element.getElementsByTagName("category").item(0).getTextContent();
+        int amount = Integer.parseInt(element.getAttribute("amount"));
+        int realAmount = Integer.parseInt(element.getAttribute("realAmount"));
         
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Element element = (Element) nodeList.item(i);
-            
-            int id = Integer.parseInt(element.getAttribute("id"));
-            String title = element.getElementsByTagName("title").item(0).getTextContent();
-            String author = element.getElementsByTagName("author").item(0).getTextContent();
-            int year = Integer.parseInt(element.getElementsByTagName("year").item(0).getTextContent());
-            double price = Double.parseDouble(element.getElementsByTagName("price").item(0).getTextContent());
-            String category = element.getElementsByTagName("category").item(0).getTextContent();
-            int amount = Integer.parseInt(element.getElementsByTagName("amount").item(0).getTextContent());
-            int realAmount = Integer.parseInt(element.getElementsByTagName("realAmount").item(0).getTextContent());
-            
-            books.add(new Book(id, title, author, year, price, category, amount, realAmount));
-        }
+        books.add(new Book(id, title, author, year, price, category, amount, realAmount));
     }
+}
 
 private void saveBooksToXML() throws Exception {
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -157,14 +157,14 @@ private void saveBooksToXML() throws Exception {
     for (Book book : books) {
         Element bookElement = doc.createElement("book");
         bookElement.setAttribute("id", String.valueOf(book.getId()));
+        bookElement.setAttribute("amount", String.valueOf(book.getAmount()));
+        bookElement.setAttribute("realAmount", String.valueOf(book.getRealAmount()));
         
         addElement(doc, bookElement, "title", book.getTitle());
         addElement(doc, bookElement, "author", book.getAuthor());
         addElement(doc, bookElement, "year", String.valueOf(book.getYear()));
         addElement(doc, bookElement, "price", df.format(book.getPrice()));
         addElement(doc, bookElement, "category", book.getCategory());
-        addElement(doc, bookElement, "amount", String.valueOf(book.getAmount()));
-        addElement(doc, bookElement, "realAmount", String.valueOf(book.getRealAmount()));
         
         rootElement.appendChild(bookElement);
     }
@@ -339,13 +339,6 @@ private void saveBooksToXML() throws Exception {
                         categoryBox.getSelectionModel().clearSelection();
                         amountField.clear();
                         realAmountField.clear();
-                        
-                        titleField.setStyle("");
-                        authorField.setStyle("");
-                        yearField.setStyle("");
-                        priceField.setStyle("");
-                        amountField.setStyle("");
-                        realAmountField.setStyle("");
                         
                         showAlert("Успех", "Книга добавлена успешно!");
                     } else {

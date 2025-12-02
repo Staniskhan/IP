@@ -16,10 +16,10 @@
       <xs:element name="year" type="yearType"/>
       <xs:element name="price" type="priceType"/>
       <xs:element name="category" type="categoryType"/>
-      <xs:element name="amount" type="xs:positiveInteger"/>
-      <xs:element name="realAmount" type="xs:nonNegativeInteger"/>
     </xs:sequence>
     <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+    <xs:attribute name="amount" type="xs:positiveInteger" use="required"/>
+    <xs:attribute name="realAmount" type="xs:nonNegativeInteger" use="required"/>
   </xs:complexType>
 
   <xs:simpleType name="yearType">
