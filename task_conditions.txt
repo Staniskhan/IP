@@ -91,14 +91,19 @@
 
 ----------------------------------------------------------------------------------------------------------------------------
 
-Сделать лабораторную работу 4, но ввод и вывод данных осуществить через .json файлы.
+Сделать лабораторную работу 4, но ввод и вывод данных осуществить через .json файлы. Должна быть возможность работы 
+и с .json и с .txt файлами.
 
-Входные данные: "input_files/lab4_input.json".
+Входные данные: "input_files/lab4_input.json", "input_files/lab4_input.txt".
 Выходные данные: "input_files/lab4_input.json", "output_files/allInf.json", "output_files/names.json", 
 "output_files/AVG.json", "output_files/sortUpAVG.json", "output_files/sortDownAVG.json", "output_files/sortUpName.json", 
 "output_files/sortDownName.json", "output_files/sortUpYearGroup.json", "output_files/sortDownYearGroup.json", 
 "output_files/ExcellentStudentsAllInf.json", "output_files/ExcellentStudentsNames.json", 
-"output_files/ExcellentStudentsAVG.json".
+"output_files/ExcellentStudentsAVG.json", "input_files/lab4_input.txt", "output_files/allInf.txt", 
+"output_files/names.txt", "output_files/AVG.txt", "output_files/sortUpAVG.txt", "output_files/sortDownAVG.txt", 
+"output_files/sortUpName.txt", "output_files/sortDownName.txt", "output_files/sortUpYearGroup.txt", 
+"output_files/sortDownYearGroup.txt", "output_files/ExcellentStudentsAllInf.txt", 
+"output_files/ExcellentStudentsNames.txt", "output_files/ExcellentStudentsAVG.txt".
 
 Решение: lab4json.
 
