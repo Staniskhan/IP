@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/table/pom.xml" />
+        <option value="$PROJECT_DIR$/library/pom.xml" />
+        <option value="$PROJECT_DIR$/rpncalc/pom.xml" />
+        <option value="$PROJECT_DIR$/lab4json/pom.xml" />
+        <option value="$PROJECT_DIR$/cw_11_11_25/pom.xml" />
+        <option value="$PROJECT_DIR$/graphicsort/pom.xml" />
+        <option value="$PROJECT_DIR$/xsd_validation_check/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="24" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
