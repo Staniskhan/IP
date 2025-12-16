@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="ru">
+
+<div class="card">
+    <div class="card-header text-white" style="background-color: #6fb3b8;">
+        <h4 class="mb-0">Вернуть книгу</h4>
+    </div>
+    <div class="card-body">
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <form th:action="@{/librarian/return-book}" method="post">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Читатель</label>
+                    <select class="form-control" name="username" required>
+                        <option value="">Выберите</option>
+                        <option th:each="reader : ${readers}"
+                                th:value="${reader.username}"
+                                th:text="${reader.username}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Книга</label>
+                    <select class="form-control" name="bookId" required>
+                        <option value="">Выберите</option>
+                        <option th:each="book : ${books}"
+                                th:value="${book.id}"
+                                th:text="${book.title + ' - ' + book.author}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn" style="background-color: #6fb3b8; color: white;">Вернуть</button>
+                <a href="/librarian/dashboard" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>

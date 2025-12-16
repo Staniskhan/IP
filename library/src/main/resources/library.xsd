@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="library">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="book" type="bookType" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="bookType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="author" type="xs:string"/>
+      <xs:element name="year" type="yearType"/>
+      <xs:element name="price" type="priceType"/>
+      <xs:element name="category" type="categoryType"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+    <xs:attribute name="amount" type="xs:positiveInteger" use="required"/>
+    <xs:attribute name="realAmount" type="xs:nonNegativeInteger" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="yearType">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-3350"/>
+      <xs:maxInclusive value="2025"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="priceType">
+    <xs:restriction base="xs:decimal">
+      <xs:minExclusive value="0"/>
+      <xs:fractionDigits value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="categoryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="programming"/>
+      <xs:enumeration value="computer-science"/>
+      <xs:enumeration value="fiction"/>
+      <xs:enumeration value="non-fiction"/>
+      <xs:enumeration value="science"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

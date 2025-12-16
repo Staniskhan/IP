@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="ru">
+
+<div class="card">
+    <div class="card-header text-white" style="background-color: #5bc0be;">
+        <h4 class="mb-0">Поиск книг</h4>
+    </div>
+    <div class="card-body">
+        <form th:action="@{/reader/search}" method="post">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Тип поиска</label>
+                    <select class="form-control" name="searchType" required>
+                        <option value="">Выберите</option>
+                        <option value="author">По автору</option>
+                        <option value="year">По году</option>
+                        <option value="category">По категории</option>
+                    </select>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label">Значение</label>
+                    <input type="text" class="form-control" name="searchValue" required>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn" style="background-color: #5bc0be; color: white;">Найти</button>
+                <a href="/reader/dashboard" class="btn btn-secondary">Назад</a>
+            </div>
+        </form>
+    </div>
+</div>

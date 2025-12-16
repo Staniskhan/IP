@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="ru">
+
+<div class="card">
+    <div class="card-header text-white" style="background-color: #6fb3b8;">
+        <h4 class="mb-0">Мой аккаунт</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5>Информация</h5>
+                        <div class="mt-3">
+                            <p><strong>Имя:</strong><br>
+                                <span th:text="${username}"></span></p>
+                            <p><strong>Роль:</strong><br>ЧИТАТЕЛЬ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">Мои книги</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(borrowedBooks)}" class="text-center text-muted py-4">
+                            <h5>Нет взятых книг</h5>
+                            <a href="/reader/books" class="btn" style="background-color: #2c7873; color: white;">Каталог</a>
+                        </div>
+
+                        <div th:unless="${#lists.isEmpty(borrowedBooks)}">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Название книги</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="book, iter : ${borrowedBooks}">
+                                        <td th:text="${iter.count}"></td>
+                                        <td><span th:text="${book}"></span></td>
+                                        <td>На руках</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
