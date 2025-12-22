@@ -1,42 +1,21 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
-      lang="ru">
+<div>
+    <h2>Панель читателя</h2>
+    <p>Добро пожаловать, <span sec:authentication="name"></span></p>
 
-<div class="card">
-    <div class="card-header text-white" style="background-color: #2c7873;">
-        <h4 class="mb-0">Панель читателя</h4>
-    </div>
-    <div class="card-body">
-        <h5 class="card-title"><span sec:authentication="name"></span></h5>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+        <div style="border: 1px solid #ddd; padding: 20px; text-align: center;">
+            <h4>Каталог книг</h4>
+            <a href="/reader/books" style="display: inline-block; background-color: #4CAF50; color: white; padding: 8px 16px; text-decoration: none; border-radius: 3px;">Перейти</a>
+        </div>
 
-        <div class="row mt-4">
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Каталог книг</h5>
-                        <a href="/reader/books" class="btn" style="background-color: #2c7873; color: white;">Перейти</a>
-                    </div>
-                </div>
-            </div>
+        <div style="border: 1px solid #ddd; padding: 20px; text-align: center;">
+            <h4>Поиск книг</h4>
+            <a href="/reader/search" style="display: inline-block; background-color: #2196F3; color: white; padding: 8px 16px; text-decoration: none; border-radius: 3px;">Перейти</a>
+        </div>
 
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Поиск книг</h5>
-                        <a href="/reader/search" class="btn" style="background-color: #5bc0be; color: white;">Перейти</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Мой аккаунт</h5>
-                        <a href="/reader/account" class="btn" style="background-color: #6fb3b8; color: white;">Перейти</a>
-                    </div>
-                </div>
-            </div>
+        <div style="border: 1px solid #ddd; padding: 20px; text-align: center;">
+            <h4>Мой аккаунт</h4>
+            <a href="/reader/account" style="display: inline-block; background-color: #FF9800; color: white; padding: 8px 16px; text-decoration: none; border-radius: 3px;">Перейти</a>
         </div>
     </div>
 </div>

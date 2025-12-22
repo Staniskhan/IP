@@ -1,38 +1,29 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
-      lang="ru">
-<div class="card">
-    <div class="card-header text-white" style="background-color: #6fb3b8;">
-        <h4 class="mb-0">Изменить цену</h4>
-    </div>
-    <div class="card-body">
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+<div style="max-width: 600px; margin: 0 auto;">
+    <h2>Изменить цену книги</h2>
 
-        <form th:action="@{/librarian/update-price}" method="post">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Книга</label>
-                    <select class="form-control" name="bookId" required>
-                        <option value="">Выберите</option>
-                        <option th:each="book : ${books}"
-                                th:value="${book.id}"
-                                th:text="${book.title + ' - ' + book.author}">
-                        </option>
-                    </select>
-                </div>
+    <div th:if="${success}" style="background-color: #d4edda; color: #155724; padding: 10px; margin: 10px 0; border-radius: 3px;" th:text="${success}"></div>
+    <div th:if="${error}" style="background-color: #f8d7da; color: #721c24; padding: 10px; margin: 10px 0; border-radius: 3px;" th:text="${error}"></div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Новая цена</label>
-                    <input type="number" step="0.01" class="form-control" name="newPrice" required>
-                </div>
-            </div>
+    <form method="post" action="/librarian/update-price">
+        <div style="margin-bottom: 15px;">
+            <label>Книга:</label>
+            <select name="bookId" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
+                <option value="">Выберите книгу</option>
+                <option th:each="book : ${books}"
+                        th:value="${book.id}"
+                        th:text="${book.title + ' - ' + book.author}">
+                </option>
+            </select>
+        </div>
 
-            <div class="mt-4">
-                <button type="submit" class="btn" style="background-color: #6fb3b8; color: white;">Обновить</button>
-                <a href="/librarian/books" class="btn btn-secondary">Отмена</a>
-            </div>
-        </form>
-    </div>
+        <div style="margin-bottom: 15px;">
+            <label>Новая цена:</label>
+            <input type="number" step="0.01" name="newPrice" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button type="submit" style="background-color: #2196F3; color: white; border: none; padding: 10px 20px; border-radius: 3px; cursor: pointer;">Обновить цену</button>
+            <a href="/librarian/books" style="color: #666; margin-left: 10px;">Отмена</a>
+        </div>
+    </form>
 </div>

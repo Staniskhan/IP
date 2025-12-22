@@ -1,122 +1,249 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <library>
-    <book amount="30" id="1" realAmount="27">
-        <title>Java Programming</title>
-        <author>James Gosling</author>
-        <year>2020</year>
-        <price>49.99</price>
-        <category>programming</category>
-    </book>
-    <book amount="50" id="2" realAmount="17">
-        <title>Design Patterns</title>
-        <author>Erich Gamma</author>
-        <year>1994</year>
-        <price>39.99</price>
-        <category>computer-science</category>
-    </book>
-    <book amount="40" id="3" realAmount="35">
-        <title>The C Programming Language</title>
-        <author>Brian Kernighan</author>
-        <year>1978</year>
-        <price>45.00</price>
-        <category>programming</category>
-    </book>
-    <book amount="60" id="4" realAmount="50">
-        <title>The Pragmatic Programmer</title>
-        <author>Andrew Hunt</author>
-        <year>1999</year>
-        <price>35.50</price>
-        <category>programming</category>
-    </book>
-    <book amount="55" id="5" realAmount="45">
-        <title>Clean Code</title>
-        <author>Robert Martin</author>
-        <year>2008</year>
-        <price>40.00</price>
-        <category>programming</category>
-    </book>
-    <book amount="70" id="6" realAmount="65">
-        <title>Introduction to Algorithms</title>
-        <author>Thomas Cormen</author>
-        <year>1990</year>
-        <price>60.00</price>
-        <category>computer-science</category>
-    </book>
-    <book amount="30" id="7" realAmount="25">
-        <title>The Art of Computer Programming</title>
-        <author>Donald Knuth</author>
-        <year>1968</year>
-        <price>80.00</price>
-        <category>computer-science</category>
-    </book>
-    <book amount="100" id="8" realAmount="80">
-        <title>1984</title>
-        <author>George Orwell</author>
-        <year>1949</year>
-        <price>9.99</price>
-        <category>fiction</category>
-    </book>
-    <book amount="90" id="9" realAmount="75">
-        <title>Animal Farm</title>
-        <author>George Orwell</author>
-        <year>1945</year>
-        <price>8.99</price>
-        <category>fiction</category>
-    </book>
-    <book amount="50" id="10" realAmount="40">
-        <title>The Selfish Gene</title>
-        <author>Richard Dawkins</author>
-        <year>1976</year>
-        <price>12.99</price>
-        <category>science</category>
-    </book>
-    <book amount="60" id="11" realAmount="50">
-        <title>The God Delusion</title>
-        <author>Richard Dawkins</author>
-        <year>2006</year>
-        <price>14.99</price>
-        <category>non-fiction</category>
-    </book>
-    <book amount="80" id="12" realAmount="70">
-        <title>Sapiens</title>
-        <author>Yuval Noah Harari</author>
-        <year>2011</year>
-        <price>18.99</price>
-        <category>non-fiction</category>
-    </book>
-    <book amount="120" id="13" realAmount="100">
-        <title>The Da Vinci Code</title>
-        <author>Dan Brown</author>
-        <year>2003</year>
-        <price>10.99</price>
-        <category>fiction</category>
-    </book>
-    <book amount="110" id="14" realAmount="90">
-        <title>Angels &amp; Demons</title>
-        <author>Dan Brown</author>
-        <year>2000</year>
-        <price>10.99</price>
-        <category>fiction</category>
-    </book>
-    <book amount="85" id="15" realAmount="69">
-        <title>The Great Gatsby</title>
-        <author>F. Scott Fitzgerald</author>
-        <year>1925</year>
-        <price>7.99</price>
-        <category>fiction</category>
-    </book>
-    <book amount="34" id="16" realAmount="23">
-        <title>testName</title>
-        <author>testAuthow</author>
-        <year>1912</year>
-        <price>12.34</price>
-        <category>fiction</category>
-    </book>
-    <book amount="12" id="17" realAmount="10">
-        <title>test1</title>
-        <author>test1a</author>
-        <year>1234</year>
-        <price>12.34</price>
-        <category>programming</category>
-    </book>
+      
+  <book amount="30" id="1" realAmount="27">
+            
+    <title>Java Programming</title>
+            
+    <author>James Gosling</author>
+            
+    <year>2020</year>
+            
+    <price>49.99</price>
+            
+    <category>programming</category>
+        
+  </book>
+      
+  <book amount="50" id="2" realAmount="17">
+            
+    <title>Design Patterns</title>
+            
+    <author>Erich Gamma</author>
+            
+    <year>1994</year>
+            
+    <price>39.99</price>
+            
+    <category>computer-science</category>
+        
+  </book>
+      
+  <book amount="40" id="3" realAmount="35">
+            
+    <title>The C Programming Language</title>
+            
+    <author>Brian Kernighan</author>
+            
+    <year>1978</year>
+            
+    <price>45.00</price>
+            
+    <category>programming</category>
+        
+  </book>
+      
+  <book amount="60" id="4" realAmount="50">
+            
+    <title>The Pragmatic Programmer</title>
+            
+    <author>Andrew Hunt</author>
+            
+    <year>1999</year>
+            
+    <price>35.50</price>
+            
+    <category>programming</category>
+        
+  </book>
+      
+  <book amount="55" id="5" realAmount="45">
+            
+    <title>Clean Code</title>
+            
+    <author>Robert Martin</author>
+            
+    <year>2008</year>
+            
+    <price>40.00</price>
+            
+    <category>programming</category>
+        
+  </book>
+      
+  <book amount="70" id="6" realAmount="65">
+            
+    <title>Introduction to Algorithms</title>
+            
+    <author>Thomas Cormen</author>
+            
+    <year>1990</year>
+            
+    <price>60.00</price>
+            
+    <category>computer-science</category>
+        
+  </book>
+      
+  <book amount="30" id="7" realAmount="25">
+            
+    <title>The Art of Computer Programming</title>
+            
+    <author>Donald Knuth</author>
+            
+    <year>1968</year>
+            
+    <price>80.00</price>
+            
+    <category>computer-science</category>
+        
+  </book>
+      
+  <book amount="100" id="8" realAmount="80">
+            
+    <title>1984</title>
+            
+    <author>George Orwell</author>
+            
+    <year>1949</year>
+            
+    <price>9.99</price>
+            
+    <category>fiction</category>
+        
+  </book>
+      
+  <book amount="90" id="9" realAmount="75">
+            
+    <title>Animal Farm</title>
+            
+    <author>George Orwell</author>
+            
+    <year>1945</year>
+            
+    <price>8.99</price>
+            
+    <category>fiction</category>
+        
+  </book>
+      
+  <book amount="50" id="10" realAmount="40">
+            
+    <title>The Selfish Gene</title>
+            
+    <author>Richard Dawkins</author>
+            
+    <year>1976</year>
+            
+    <price>12.99</price>
+            
+    <category>science</category>
+        
+  </book>
+      
+  <book amount="60" id="11" realAmount="50">
+            
+    <title>The God Delusion</title>
+            
+    <author>Richard Dawkins</author>
+            
+    <year>2006</year>
+            
+    <price>14.99</price>
+            
+    <category>non-fiction</category>
+        
+  </book>
+      
+  <book amount="80" id="12" realAmount="70">
+            
+    <title>Sapiens</title>
+            
+    <author>Yuval Noah Harari</author>
+            
+    <year>2011</year>
+            
+    <price>18.99</price>
+            
+    <category>non-fiction</category>
+        
+  </book>
+      
+  <book amount="120" id="13" realAmount="100">
+            
+    <title>The Da Vinci Code</title>
+            
+    <author>Dan Brown</author>
+            
+    <year>2003</year>
+            
+    <price>10.99</price>
+            
+    <category>fiction</category>
+        
+  </book>
+      
+  <book amount="110" id="14" realAmount="90">
+            
+    <title>Angels &amp; Demons</title>
+            
+    <author>Dan Brown</author>
+            
+    <year>2000</year>
+            
+    <price>10.99</price>
+            
+    <category>fiction</category>
+        
+  </book>
+      
+  <book amount="85" id="15" realAmount="69">
+            
+    <title>The Great Gatsby</title>
+            
+    <author>F. Scott Fitzgerald</author>
+            
+    <year>1925</year>
+            
+    <price>7.99</price>
+            
+    <category>fiction</category>
+        
+  </book>
+      
+  <book amount="34" id="16" realAmount="23">
+            
+    <title>testName</title>
+            
+    <author>testAuthow</author>
+            
+    <year>1912</year>
+            
+    <price>12.34</price>
+            
+    <category>fiction</category>
+        
+  </book>
+      
+  <book amount="12" id="17" realAmount="10">
+            
+    <title>test1</title>
+            
+    <author>test1a</author>
+            
+    <year>1234</year>
+            
+    <price>12.34</price>
+            
+    <category>programming</category>
+        
+  </book>
+  
+  <book availableCopies="123" id="18" totalCopies="123">
+    <title>test2312</title>
+    <author>a</author>
+    <year>123</year>
+    <price>123</price>
+    <category>fiction</category>
+  </book>
 </library>

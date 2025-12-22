@@ -1,56 +1,55 @@
-<div class="card">
-    <div class="card-header text-white" style="background-color: #5bc0be;">
-        <h4 class="mb-0">Добавить книгу</h4>
-    </div>
-    <div class="card-body">
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+<div style="max-width: 600px; margin: 0 auto;">
+    <h2>Добавить книгу</h2>
 
-        <form th:action="@{/librarian/add-book}" method="post" th:object="${book}">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Название</label>
-                    <input type="text" class="form-control" name="title" th:field="*{title}" required>
-                </div>
+    <div th:if="${success}" style="background-color: #d4edda; color: #155724; padding: 10px; margin: 10px 0; border-radius: 3px;" th:text="${success}"></div>
+    <div th:if="${error}" style="background-color: #f8d7da; color: #721c24; padding: 10px; margin: 10px 0; border-radius: 3px;" th:text="${error}"></div>
 
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Автор</label>
-                    <input type="text" class="form-control" name="author" th:field="*{author}" required>
-                </div>
+    <form th:action="@{/librarian/add-book}" method="post">
+        <div style="margin-bottom: 15px;">
+            <label>Название:</label>
+            <input type="text" name="title" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
+        </div>
 
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Год</label>
-                    <input type="number" class="form-control" name="publicationYear" th:field="*{publicationYear}" required>
-                </div>
+        <div style="margin-bottom: 15px;">
+            <label>Автор:</label>
+            <input type="text" name="author" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
+        </div>
 
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Цена</label>
-                    <input type="number" step="0.01" class="form-control" name="price" th:field="*{price}" required>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Категория</label>
-                    <select class="form-control" name="category" th:field="*{category}" required>
-                        <option value="">Выберите</option>
-                        <option value="programming">Программирование</option>
-                        <option value="computer-science">Компьютерные науки</option>
-                        <option value="fiction">Художественная литература</option>
-                        <option value="science">Наука</option>
-                        <option value="history">История</option>
-                        <option value="other">Другое</option>
-                    </select>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Копии</label>
-                    <input type="number" class="form-control" name="totalCopies" th:field="*{totalCopies}" required>
-                </div>
+        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+                <label>Год:</label>
+                <input type="number" name="publicationYear" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
             </div>
 
-            <div class="mt-4">
-                <button type="submit" class="btn" style="background-color: #5bc0be; color: white;">Добавить</button>
-                <a href="/librarian/books" class="btn btn-secondary">Отмена</a>
+            <div style="flex: 1;">
+                <label>Цена:</label>
+                <input type="number" step="0.01" name="price" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+                <label>Категория:</label>
+                <select name="category" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
+                    <option value="">Выберите</option>
+                    <option value="programming">Программирование</option>
+                    <option value="computer-science">Компьютерные науки</option>
+                    <option value="fiction">Художественная литература</option>
+                    <option value="science">Наука</option>
+                    <option value="history">История</option>
+                    <option value="other">Другое</option>
+                </select>
+            </div>
+
+            <div style="flex: 1;">
+                <label>Копии:</label>
+                <input type="number" name="totalCopies" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px;" required>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 3px; cursor: pointer;">Добавить</button>
+            <a href="/librarian/books" style="color: #666; margin-left: 10px;">Отмена</a>
+        </div>
+    </form>
 </div>
