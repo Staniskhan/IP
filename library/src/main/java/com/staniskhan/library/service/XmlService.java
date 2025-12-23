@@ -159,7 +159,7 @@ public class XmlService {
             }
             File file = new File(XML_FILE);
             if (!file.exists()) {
-                createEmptyBookXml(); // Выделил создание в метод для порядка
+                createEmptyBookXml();
                 return books;
             }
 
