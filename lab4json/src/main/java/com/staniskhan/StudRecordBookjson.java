@@ -343,6 +343,7 @@ public class StudRecordBookjson
         }
         return ret;
     }
+    
 
 
     public boolean isExcellentStudent()
@@ -367,4 +368,22 @@ public class StudRecordBookjson
         }
         return ret;
     }
+
+    // Добавить в StudRecordBookjson.java
+public void saveToTxt(FileWriter writer) throws IOException {
+    writer.write(surname + "\n");
+    writer.write(name + "\n");
+    writer.write(second_name + "\n");
+    writer.write(year + " " + group + " " + semester + "\n");
+    writer.write(number_of_passed_sessions + "\n");
+    for (Session session : sessions) {
+        writer.write(session.number_of_disciplines + "\n");
+        for (Session.discipline disc : session.disciplines) {
+            writer.write(disc.disciplineName + "\n");
+            writer.write(disc.semesterMark + "\n");
+            writer.write(disc.testMark + "\n");
+            writer.write(disc.examMark + "\n");
+        }
+    }
+}
 }

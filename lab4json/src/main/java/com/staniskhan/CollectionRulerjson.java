@@ -1,8 +1,12 @@
 package com.staniskhan;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import com.google.gson.Gson;
@@ -171,13 +175,16 @@ public class CollectionRulerjson {
 
 
 
-
+//========================================================================================================================
+//========================================================================================================================
+//========================================================================================================================
 
     int number_of_students;
     Vector<StudRecordBookjson> students;
 
-    public CollectionRulerjson(String filename) {
-        try {
+    public CollectionRulerjson(String filename, boolean isJson) {
+         if (isJson) {
+            try {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             FileReader reader = new FileReader(filename);
             
@@ -191,6 +198,58 @@ public class CollectionRulerjson {
             students = new Vector<>();
         }
         number_of_students = students.size();
+        } 
+        else 
+            {
+        try
+        {
+            students = new Vector<>();
+            try
+            {
+                File file = new File(filename);
+                Scanner fileScanner = new Scanner(file);
+                number_of_students = Integer.parseInt(fileScanner.nextLine());
+
+                for (int i = 0; i < number_of_students; i++)
+                {
+                    String surname = fileScanner.nextLine();
+                    String name = fileScanner.nextLine();
+                    String second_name = fileScanner.nextLine();
+                    StringTokenizer strtok = new StringTokenizer(fileScanner.nextLine(), "\s+");
+                    int year = Integer.parseInt(strtok.nextToken());
+                    int group = Integer.parseInt(strtok.nextToken());
+                    int semester = Integer.parseInt(strtok.nextToken());
+                    String args = fileScanner.nextLine();
+                    int num_of_passed_sessions = Integer.parseInt(args);
+                    args += " ";
+                    for (int a = 0; a < num_of_passed_sessions; a++)
+                    {
+                        String num_of_dis_str = fileScanner.nextLine();
+                        args += num_of_dis_str + " ";
+                        int num_of_disciplines = Integer.parseInt(num_of_dis_str);
+                        for (int b = 0; b < 4 * num_of_disciplines; b++)
+                        {
+                            args += fileScanner.nextLine();
+                            args += " ";
+                        }
+                    }
+                    StudRecordBookjson srb_curr = new StudRecordBookjson(surname, name, second_name, year, group, semester, args);
+                    students.addElement(srb_curr);
+                }
+            }
+            catch(FileNotFoundException e)
+            {
+                System.out.println("\nFILE NOT FOUND\n");
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("OOPS! SMTH WENT WRONG. HERE'S THE DISCRIPTION OF THE EXCEPTION:");
+            e.printStackTrace();
+        }
+        }
+
     }
 
     public void fileOutAllInformation(String filename) {
@@ -488,4 +547,15 @@ public class CollectionRulerjson {
             e.printStackTrace();
         }
     }
+
+public void saveToTxt(String filename) {
+    try (FileWriter writer = new FileWriter(filename)) {
+        writer.write(students.size() + "\n");
+        for (StudRecordBookjson student : students) {
+            student.saveToTxt(writer);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 }
