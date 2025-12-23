@@ -22,10 +22,10 @@ public class Book {
     private BigDecimal price;
     private String category;
 
-    @Column(name = "total_copies")
+    @Column(name = "amount")
     private int totalCopies;
 
-    @Column(name = "available_copies")
+    @Column(name = "realAmount")
     private int availableCopies;
 
     public Book() {}

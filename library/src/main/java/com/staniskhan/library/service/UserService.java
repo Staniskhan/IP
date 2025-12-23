@@ -2,13 +2,13 @@ package com.staniskhan.library.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.staniskhan.library.model.User;
-import com.staniskhan.library.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 
@@ -16,108 +16,87 @@ import jakarta.annotation.PostConstruct;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private XmlService xmlService; // Используем XmlService вместо UserRepository
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Кэш пользователей в памяти, чтобы не читать файл постоянно
+    private List<User> usersCache = new ArrayList<>();
+
     @PostConstruct
     public void init() {
-        System.out.println("=== Инициализация тестовых пользователей ===");
+        System.out.println("=== Инициализация UserService (XML) ===");
 
-        // Создаем библиотекаря
-        if (!userRepository.existsByUsername("librarian")) {
-            String rawPassword = "123";
-            String encodedPassword = passwordEncoder.encode(rawPassword);
+        // Загружаем всех из XML
+        usersCache = xmlService.loadUsersFromXml();
+        System.out.println("Загружено пользователей из XML: " + usersCache.size());
 
-            User user = new User();
-            user.setUsername("librarian");
-            user.setPassword(encodedPassword);
-            user.setRole("LIBRARIAN");
-            userRepository.save(user);
-
-            System.out.println("Создан БИБЛИОТЕКАРЬ:");
-            System.out.println("  Логин: librarian");
-            System.out.println("  Пароль (сырой): 123");
-            System.out.println("  Пароль (хеш): " + encodedPassword);
-            System.out.println("  Роль: LIBRARIAN");
+        // Проверяем/Создаем библиотекаря
+        if (findByUsername("librarian").isEmpty()) {
+            registerUserInternal("librarian", "123", "LIBRARIAN");
         }
 
-        if (!userRepository.existsByUsername("reader")) {
-            String rawPassword = "123";
-            String encodedPassword = passwordEncoder.encode(rawPassword);
-
-            User user = new User();
-            user.setUsername("reader");
-            user.setPassword(encodedPassword);
-            user.setRole("READER");
-            userRepository.save(user);
-
-            System.out.println("Создан ЧИТАТЕЛЬ:");
-            System.out.println("  Логин: reader");
-            System.out.println("  Пароль (сырой): 123");
-            System.out.println("  Пароль (хеш): " + encodedPassword);
-            System.out.println("  Роль: READER");
+        // Проверяем/Создаем читателя
+        if (findByUsername("reader").isEmpty()) {
+            registerUserInternal("reader", "123", "READER");
         }
+    }
 
-        System.out.println("=== Инициализация завершена ===");
+    // Внутренний метод регистрации без проверки существования (для init)
+    private void registerUserInternal(String username, String rawPassword, String role) {
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        User user = new User(username, encodedPassword, role);
+
+        usersCache.add(user); // Обновляем кэш
+        xmlService.addUserToXml(user); // Сохраняем в файл
+
+        System.out.println("Создан пользователь: " + username + " [" + role + "]");
     }
 
     public boolean registerUser(String username, String password, String role) {
-        if (userRepository.existsByUsername(username)) {
-            System.out.println("Регистрация отклонена: пользователь " + username + " уже существует");
+        if (findByUsername(username).isPresent()) {
             return false;
         }
-
-        User user = new User();
-        user.setUsername(username);
-
-        String encodedPassword = passwordEncoder.encode(password);
-        user.setPassword(encodedPassword);
-
-        user.setRole(role.toUpperCase());
-        userRepository.save(user);
-
-        System.out.println("Зарегистрирован новый пользователь:");
-        System.out.println("  Имя: " + username);
-        System.out.println("  Роль: " + role);
-        System.out.println("  Хеш пароля: " + encodedPassword.substring(0, Math.min(30, encodedPassword.length())) + "...");
-
+        registerUserInternal(username, password, role.toUpperCase());
         return true;
     }
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return usersCache.stream()
+                .filter(u -> u.getUsername().equals(username))
+                .findFirst();
     }
 
     public void addBorrowedBook(String username, String bookTitle) {
-        User user = userRepository.findByUsername(username)
+        User user = findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + username));
 
-        user.getBorrowedBooks().add(bookTitle);
-        userRepository.save(user);
-        System.out.println("Книга '" + bookTitle + "' добавлена пользователю " + username);
+        user.addBorrowedBook(bookTitle);
+        // Сохраняем изменение списка книг в XML
+        xmlService.updateUserBorrowedBooksInXml(username, user.getBorrowedBooks());
+        System.out.println("Книга '" + bookTitle + "' записана пользователю " + username + " в XML");
     }
 
     public List<String> getBorrowedBooks(String username) {
-        User user = userRepository.findByUsername(username)
+        User user = findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + username));
-
         return user.getBorrowedBooks();
     }
 
     public void removeBorrowedBook(String username, String bookTitle) {
-        User user = userRepository.findByUsername(username)
+        User user = findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + username));
 
         user.getBorrowedBooks().remove(bookTitle);
-        userRepository.save(user);
-        System.out.println("Книга '" + bookTitle + "' удалена у пользователя " + username);
+        // Сохраняем удаление книги в XML
+        xmlService.updateUserBorrowedBooksInXml(username, user.getBorrowedBooks());
+        System.out.println("Книга '" + bookTitle + "' удалена у пользователя " + username + " в XML");
     }
 
     public List<User> getAllReaders() {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getRole().equals("READER"))
+        return usersCache.stream()
+                .filter(user -> "READER".equals(user.getRole()))
                 .toList();
     }
 }
