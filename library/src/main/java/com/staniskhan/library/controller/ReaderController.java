@@ -47,9 +47,9 @@ public class ReaderController {
     }
 
     @PostMapping("/search")
-    public String search(@RequestParam String searchType,
-                         @RequestParam String searchValue,
-                         Model model) {
+    public String searchBooks(@RequestParam String searchType,
+                              @RequestParam String searchValue,
+                              Model model) {
         List<Book> results;
 
         switch (searchType) {

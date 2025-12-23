@@ -33,7 +33,6 @@ public class SecurityConfig {
 
                         .requestMatchers("/reader/**").hasRole("READER")
 
-                        // Все остальные запросы требуют авторизации
                         .anyRequest().authenticated()
                 )
 

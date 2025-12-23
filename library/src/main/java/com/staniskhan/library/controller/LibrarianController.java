@@ -43,7 +43,7 @@ public class LibrarianController {
     public String books(Model model) {
         List<Book> books = bookService.getAllBooks();
         model.addAttribute("books", books);
-        model.addAttribute("title", "Все книги");
+        model.addAttribute("title", "Управление книгами");
         model.addAttribute("content", "librarian/books");
         return "layouts/base";
     }
@@ -57,77 +57,40 @@ public class LibrarianController {
     }
 
     @PostMapping("/add-book")
-    public String addBook(@ModelAttribute Book book,
-                          RedirectAttributes redirectAttributes) {
-        try {
-            if (book.getAvailableCopies() == 0) {
-                book.setAvailableCopies(book.getTotalCopies());
-            }
-
-            bookService.addBook(book);
-            redirectAttributes.addFlashAttribute("success",
-                    "Книга '" + book.getTitle() + "' успешно добавлена!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error",
-                    "Ошибка при добавлении книги: " + e.getMessage());
-        }
+    public String addBook(@ModelAttribute Book book) {
+        bookService.addBook(book);
         return "redirect:/librarian/books";
     }
 
-    @GetMapping("/update-price")
-    public String updatePriceForm(Model model) {
-        List<Book> books = bookService.getAllBooks();
-        model.addAttribute("books", books);
-        model.addAttribute("title", "Изменить цену книги");
-        model.addAttribute("content", "librarian/update-price");
-        return "layouts/base";
-    }
-
     @PostMapping("/update-price")
-    public String updatePrice(@RequestParam Long bookId,
-                              @RequestParam BigDecimal newPrice,
-                              RedirectAttributes redirectAttributes) {
-        try {
-            bookService.updateBookPrice(bookId, newPrice);
-            redirectAttributes.addFlashAttribute("success",
-                    "Цена книги успешно обновлена!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error",
-                    "Ошибка: " + e.getMessage());
-        }
+    public String updatePrice(@RequestParam Long bookId, @RequestParam BigDecimal price) {
+        bookService.updateBookPrice(bookId, price);
         return "redirect:/librarian/books";
     }
 
     @GetMapping("/issue-book")
     public String issueBookForm(Model model) {
-        List<Book> books = bookService.getAllBooks();
-        List<Book> availableBooks = books.stream()
-                .filter(book -> book.getAvailableCopies() > 0)
-                .toList();
-
         List<User> readers = userService.getAllReaders();
+        List<Book> allBooks = bookService.getAllBooks();
 
-        model.addAttribute("books", availableBooks);
-        model.addAttribute("readers", readers); // Добавляем список читателей
-        model.addAttribute("title", "Выдать книгу читателю");
+        model.addAttribute("readers", readers);
+        model.addAttribute("books", allBooks);
+        model.addAttribute("title", "Выдать книгу");
         model.addAttribute("content", "librarian/issue-book");
         return "layouts/base";
     }
 
     @PostMapping("/issue-book")
-    public String issueBook(@RequestParam Long bookId,
-                            @RequestParam String username,
+    public String issueBook(@RequestParam String username,
+                            @RequestParam Long bookId,
                             RedirectAttributes redirectAttributes) {
         try {
             bookService.issueBook(bookId, username);
-
-            redirectAttributes.addFlashAttribute("success",
-                    "Книга успешно выдана пользователю " + username);
+            redirectAttributes.addFlashAttribute("success", "Книга успешно выдана пользователю " + username);
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error",
-                    "Ошибка при выдаче книги: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Ошибка при выдаче: " + e.getMessage());
         }
-        return "redirect:/librarian/dashboard";
+        return "redirect:/librarian/books";
     }
 
     @GetMapping("/return-book")

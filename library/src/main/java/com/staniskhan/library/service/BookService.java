@@ -18,8 +18,6 @@ public class BookService {
     @Autowired
     private UserService userService;
 
-    // Вместо репозитория используем список в памяти (кэш),
-    // который синхронизируется с XML
     private List<Book> booksCache;
 
     @PostConstruct
@@ -28,7 +26,6 @@ public class BookService {
         refreshCache();
     }
 
-    // Обновляет данные из файла
     private void refreshCache() {
         this.booksCache = xmlService.loadBooksFromXml();
     }
@@ -39,7 +36,7 @@ public class BookService {
 
     public void addBook(Book book) {
         xmlService.addBookToXml(book);
-        refreshCache(); // Обновляем список после добавления
+        refreshCache();
     }
 
     public void updateBookPrice(Long id, BigDecimal newPrice) {
@@ -52,63 +49,52 @@ public class BookService {
                 .orElseThrow(() -> new RuntimeException("Книга не найдена"));
 
         if (book.getAvailableCopies() <= 0) {
-            throw new RuntimeException("Нет доступных копий");
+            throw new RuntimeException("Нет доступных копий книги: " + book.getTitle());
         }
 
-        // 1. Обновляем в XML (уменьшаем количество)
-        xmlService.issueBookInXml(bookId);
-        // 2. Добавляем книгу пользователю
         userService.addBorrowedBook(username, book.getTitle());
+
+        xmlService.issueBookInXml(bookId);
 
         refreshCache();
     }
 
-// Обновленный метод в BookService.java
-
     public void returnBook(Long bookId, String username) {
-        // 1. Находим саму книгу
         Book book = getBookById(bookId)
                 .orElseThrow(() -> new RuntimeException("Книга не найдена"));
 
-        // 2. Проверяем, есть ли эта книга у пользователя
         List<String> userBorrowedBooks = userService.getBorrowedBooks(username);
 
-        // Сравниваем по названию, так как в User хранится список названий
         if (!userBorrowedBooks.contains(book.getTitle())) {
-            throw new RuntimeException("У пользователя " + username + " нет книги '" + book.getTitle() + "'");
+            throw new RuntimeException("У читателя " + username + " нет книги '" + book.getTitle() + "'");
         }
 
-        // 3. Удаляем книгу у пользователя (обновляет users.xml)
         userService.removeBorrowedBook(username, book.getTitle());
 
-        // 4. Увеличиваем количество доступных книг в библиотеке (обновляет library.xml)
         xmlService.returnBookInXml(bookId);
 
-        // 5. Обновляем кэш, чтобы данные на экране обновились сразу
         refreshCache();
     }
 
-    public Optional<Book> getBookById(Long id) {
-        return booksCache.stream()
-                .filter(b -> b.getId().equals(id))
-                .findFirst();
-    }
-
     public List<Book> searchByAuthor(String author) {
-        return booksCache.stream()
-                .filter(b -> b.getAuthor().toLowerCase().contains(author.toLowerCase()))
-                .collect(Collectors.toList());
+        String expression = String.format("//book[contains(translate(author, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '%s')]",
+                author.toLowerCase());
+        return xmlService.searchBooksByXPath(expression);
     }
 
     public List<Book> searchByYear(int year) {
-        return booksCache.stream()
-                .filter(b -> b.getPublicationYear() == year)
-                .collect(Collectors.toList());
+        String expression = String.format("//book[year='%d']", year);
+        return xmlService.searchBooksByXPath(expression);
     }
 
     public List<Book> searchByCategory(String category) {
-        return booksCache.stream()
-                .filter(b -> b.getCategory().toLowerCase().contains(category.toLowerCase()))
-                .collect(Collectors.toList());
+        String expression = String.format("//book[category='%s']", category);
+        return xmlService.searchBooksByXPath(expression);
+    }
+
+    public Optional<Book> getBookById(Long id) {
+        String expression = String.format("//book[@id='%d']", id);
+        List<Book> results = xmlService.searchBooksByXPath(expression);
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 }

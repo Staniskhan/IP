@@ -15,7 +15,7 @@ import com.staniskhan.library.model.User;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserService userService; // Теперь используем Service, а не Repository
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

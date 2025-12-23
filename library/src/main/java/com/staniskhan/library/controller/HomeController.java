@@ -17,14 +17,12 @@ public class HomeController {
                     .findFirst()
                     .orElse("");
 
-
             if (role.contains("LIBRARIAN")) {
                 return "redirect:/librarian/dashboard";
             } else if (role.contains("READER")) {
                 return "redirect:/reader/dashboard";
             }
         }
-
 
         return "home";
     }
