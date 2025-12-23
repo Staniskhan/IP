@@ -63,19 +63,28 @@ public class BookService {
         refreshCache();
     }
 
+// Обновленный метод в BookService.java
+
     public void returnBook(Long bookId, String username) {
+        // 1. Находим саму книгу
         Book book = getBookById(bookId)
                 .orElseThrow(() -> new RuntimeException("Книга не найдена"));
 
-        // Логика возврата в XmlService у вас может называться иначе,
-        // если метода returnBookInXml нет, его нужно добавить в XmlService аналогично issueBook
-        // Для простоты здесь просто перечитываем кэш после действий
+        // 2. Проверяем, есть ли эта книга у пользователя
+        List<String> userBorrowedBooks = userService.getBorrowedBooks(username);
 
-        // В вашем текущем XmlService метода для возврата (увеличения realAmount) нет.
-        // Пока просто вызовем удаление у пользователя
+        // Сравниваем по названию, так как в User хранится список названий
+        if (!userBorrowedBooks.contains(book.getTitle())) {
+            throw new RuntimeException("У пользователя " + username + " нет книги '" + book.getTitle() + "'");
+        }
+
+        // 3. Удаляем книгу у пользователя (обновляет users.xml)
         userService.removeBorrowedBook(username, book.getTitle());
 
-        // Здесь желательно добавить метод в XmlService для инкремента realAmount
+        // 4. Увеличиваем количество доступных книг в библиотеке (обновляет library.xml)
+        xmlService.returnBookInXml(bookId);
+
+        // 5. Обновляем кэш, чтобы данные на экране обновились сразу
         refreshCache();
     }
 

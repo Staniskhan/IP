@@ -253,7 +253,6 @@ public class XmlService {
             }
         } catch (Exception e) { throw new RuntimeException(e); }
     }
-
     public void issueBookInXml(Long bookId) {
         try {
             Document doc = loadXmlDocument(XML_FILE);
@@ -282,6 +281,42 @@ public class XmlService {
             }
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при выдаче книги в XML: " + e.getMessage(), e);
+        }
+    }
+
+    public void returnBookInXml(Long bookId) {
+        try {
+            Document doc = loadXmlDocument(XML_FILE);
+            NodeList books = doc.getElementsByTagName("book");
+            for (int i = 0; i < books.getLength(); i++) {
+                Element book = (Element) books.item(i);
+
+                // Ищем книгу по ID
+                if (book.getAttribute("id").equals(bookId.toString())) {
+                    String realAmountStr = book.getAttribute("realAmount");
+                    String totalAmountStr = book.getAttribute("amount"); // Получаем общее кол-во для проверки
+
+                    int available = 0;
+                    int total = 0;
+
+                    if (realAmountStr != null && !realAmountStr.isEmpty()) {
+                        available = Integer.parseInt(realAmountStr);
+                    }
+                    if (totalAmountStr != null && !totalAmountStr.isEmpty()) {
+                        total = Integer.parseInt(totalAmountStr);
+                    }
+
+                    // Увеличиваем количество, только если оно не превышает общее число копий
+                    // (защита от ошибок данных)
+                    if (available < total) {
+                        book.setAttribute("realAmount", String.valueOf(available + 1));
+                        saveXmlDocument(doc, XML_FILE);
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при возврате книги в XML: " + e.getMessage(), e);
         }
     }
 
@@ -323,13 +358,36 @@ public class XmlService {
     }
 
     private void saveXmlDocument(Document doc, String filePath) throws Exception {
+        // Удаляем пустые текстовые узлы, чтобы они не дублировались
+        cleanEmptyNodes(doc.getDocumentElement());
+
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+
+        // Настройки форматирования
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+        // Важная деталь: явно указываем, что мы не хотим сохранять лишние пробелы
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(new File(filePath));
         transformer.transform(source, result);
+    }
+
+    // Добавьте этот вспомогательный метод в XmlService.java
+    private void cleanEmptyNodes(Node node) {
+        NodeList childNodes = node.getChildNodes();
+        for (int i = childNodes.getLength() - 1; i >= 0; i--) {
+            Node child = childNodes.item(i);
+            if (child.getNodeType() == Node.TEXT_NODE && child.getTextContent().trim().isEmpty()) {
+                node.removeChild(child);
+            } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                cleanEmptyNodes(child);
+            }
+        }
     }
 
     private void createEmptyBookXml() throws Exception {
