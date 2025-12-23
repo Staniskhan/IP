@@ -1,5 +1,7 @@
 package com.staniskhan;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -7,6 +9,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -18,91 +21,47 @@ import javafx.stage.Stage;
 public class RPNCalculator extends Application {
 
     private TextField inputField;
+    private TextField varXField;
     private TextArea outputArea;
     private TextArea rpnArea;
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("RPN Calculator");
+        primaryStage.setTitle("RPN Calculator with Variables");
 
         inputField = new TextField();
-        inputField.setPromptText("Enter expression here...");
+        inputField.setPromptText("Введите выражение (напр. x + 5)...");
         inputField.setStyle("-fx-font-size: 16;");
+
+        Label varLabel = new Label("Значение x:");
+        varXField = new TextField("0");
+        varXField.setPrefWidth(100);
+        HBox varBox = new HBox(10, varLabel, varXField);
+        varBox.setPadding(new Insets(5, 0, 5, 0));
 
         outputArea = new TextArea();
         outputArea.setEditable(false);
         outputArea.setStyle("-fx-font-size: 14; -fx-text-fill: blue;");
         outputArea.setPrefHeight(60);
-        outputArea.setPromptText("Result will be shown here...");
 
         rpnArea = new TextArea();
         rpnArea.setEditable(false);
         rpnArea.setStyle("-fx-font-size: 14; -fx-text-fill: green;");
         rpnArea.setPrefHeight(60);
-        rpnArea.setPromptText("RPN notation will be shown here...");
 
-        Button[] numberButtons = new Button[10];
-        for (int i = 0; i < 10; i++) {
-            numberButtons[i] = new Button(String.valueOf(i));
-            final int num = i;
-            numberButtons[i].setOnAction(e -> inputField.appendText(String.valueOf(num)));
-            numberButtons[i].setPrefSize(50, 50);
-            numberButtons[i].setStyle("-fx-font-size: 16;");
-        }
-
-        Button plusBtn = createOperatorButton("+");
-        Button minusBtn = createOperatorButton("-");
-        Button multiplyBtn = createOperatorButton("*");
-        Button divideBtn = createOperatorButton("/");
-        Button leftParenBtn = createOperatorButton("(");
-        Button rightParenBtn = createOperatorButton(")");
-        Button decimalBtn = createOperatorButton(".");
+        GridPane numberPad = createNumberPad();
         
-        Button clearBtn = new Button("C");
-        clearBtn.setStyle("-fx-font-size: 16; -fx-background-color: #ff6666;");
-        clearBtn.setPrefSize(50, 50);
-        clearBtn.setOnAction(e -> {
-            inputField.clear();
-            outputArea.clear();
-            rpnArea.clear();
-        });
+        Button xBtn = new Button("x");
+        xBtn.setPrefSize(50, 50);
+        xBtn.setStyle("-fx-font-size: 16; -fx-background-color: #add8e6;");
+        xBtn.setOnAction(e -> inputField.appendText("x"));
 
-        Button backspaceBtn = new Button("⌫");
-        backspaceBtn.setStyle("-fx-font-size: 16; -fx-background-color: #ffaa66;");
-        backspaceBtn.setPrefSize(50, 50);
-        backspaceBtn.setOnAction(e -> {
-            String text = inputField.getText();
-            if (!text.isEmpty()) {
-                inputField.setText(text.substring(0, text.length() - 1));
-            }
-        });
-
-        Button equalsBtn = new Button("=");
-        equalsBtn.setStyle("-fx-font-size: 16; -fx-background-color: #66ff66;");
-        equalsBtn.setPrefSize(50, 50);
-        equalsBtn.setOnAction(e -> calculate());
-
-        GridPane numberPad = new GridPane();
-        numberPad.setHgap(5);
-        numberPad.setVgap(5);
-        numberPad.setPadding(new Insets(10));
-        
-        for (int i = 1; i <= 9; i++) {
-            numberPad.add(numberButtons[i], (i - 1) % 3, (i - 1) / 3);
-        }
-        
-        numberPad.add(numberButtons[0], 0, 3);
-        numberPad.add(decimalBtn, 1, 3);
-        numberPad.add(equalsBtn, 2, 3);
-
-        VBox operatorPanel = new VBox(5);
-        operatorPanel.setPadding(new Insets(10));
-        operatorPanel.getChildren().addAll(plusBtn, minusBtn, multiplyBtn, divideBtn, 
-                                         leftParenBtn, rightParenBtn, clearBtn, backspaceBtn);
+        VBox operatorPanel = createOperatorPanel();
+        operatorPanel.getChildren().add(0, xBtn); 
 
         VBox ioPanel = new VBox(10);
         ioPanel.setPadding(new Insets(10));
-        ioPanel.getChildren().addAll(inputField, outputArea, rpnArea);
+        ioPanel.getChildren().addAll(inputField, varBox, outputArea, rpnArea);
 
         HBox mainPanel = new HBox(10);
         mainPanel.setPadding(new Insets(10));
@@ -114,39 +73,33 @@ public class RPNCalculator extends Application {
 
         inputField.setOnAction(e -> calculate());
 
-        Scene scene = new Scene(root, 500, 500);
+        Scene scene = new Scene(root, 500, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private Button createOperatorButton(String operator) {
-        Button btn = new Button(operator);
-        btn.setPrefSize(50, 50);
-        btn.setStyle("-fx-font-size: 16;");
-        btn.setOnAction(e -> inputField.appendText(operator));
-        return btn;
-    }
-
     private void calculate() {
         String expression = inputField.getText().trim();
-        if (expression.isEmpty()) {
-            outputArea.setText("ERROR: Empty expression");
-            outputArea.setStyle("-fx-text-fill: red;");
-            return;
-        }
+        if (expression.isEmpty()) return;
 
         try {
+            double xValue = Double.parseDouble(varXField.getText().replace(",", "."));
+            Map<String, Double> variables = new HashMap<>();
+            variables.put("x", xValue);
+
             String rpn = convertToRPN(expression);
             rpnArea.setText("RPN: " + rpn);
             
-            double result = evaluateRPN(rpn);
-            outputArea.setText("Result: " + result);
+            double result = evaluateRPN(rpn, variables);
+            outputArea.setText("Результат: " + result);
             outputArea.setStyle("-fx-text-fill: blue;");
             
-        } catch (Exception e) {
-            outputArea.setText("ERROR: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            outputArea.setText("ОШИБКА: Неверное значение x");
             outputArea.setStyle("-fx-text-fill: red;");
-            rpnArea.clear();
+        } catch (Exception e) {
+            outputArea.setText("ОШИБКА: " + e.getMessage());
+            outputArea.setStyle("-fx-text-fill: red;");
         }
     }
 
@@ -157,78 +110,45 @@ public class RPNCalculator extends Application {
         
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
+            if (Character.isWhitespace(c)) continue;
             
-            if (Character.isWhitespace(c)) {
-                continue;
-            }
-            
-            if (Character.isDigit(c) || c == '.') {
-                while (i < expression.length() && 
-                       (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
-                    output.append(expression.charAt(i));
-                    i++;
+            if (Character.isDigit(c) || c == '.' || Character.isLetter(c)) {
+                if (Character.isLetter(c)) {
+                    output.append(c).append(' ');
+                    lastWasOperator = false;
+                } else {
+                    while (i < expression.length() && (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
+                        output.append(expression.charAt(i));
+                        i++;
+                    }
+                    i--; 
+                    output.append(' ');
+                    lastWasOperator = false;
                 }
-                i--; // Adjust position
-                output.append(' ');
-                lastWasOperator = false;
-                
             } else if (c == '(') {
-                if (!lastWasOperator && !stack.isEmpty() && 
-                    stack.peek() != '(' && stack.peek() != '[' && stack.peek() != '{') {
-                    throw new Exception("Operator absence before '(' at position " + (i + 1));
-                }
                 stack.push(c);
                 lastWasOperator = true;
-                
             } else if (c == ')') {
-                if (lastWasOperator && !stack.isEmpty() && stack.peek() == '(') {
-                    throw new Exception("Empty brackets at position " + (i + 1));
-                }
-                
                 while (!stack.isEmpty() && stack.peek() != '(') {
-                    if (stack.peek() == '[' || stack.peek() == '{') {
-                        throw new Exception("Mismatched brackets at position " + (i + 1));
-                    }
                     output.append(stack.pop()).append(' ');
                 }
-                
-                if (stack.isEmpty()) {
-                    throw new Exception("Missing opening bracket for ')' at position " + (i + 1));
-                }
-                stack.pop(); // Remove '('
+                if (stack.isEmpty()) throw new Exception("Пропущена скобка");
+                stack.pop();
                 lastWasOperator = false;
-                
             } else if (isOperator(c)) {
-                // Handle unary operators
-                if (lastWasOperator && (c == '+' || c == '-')) {
-                    output.append("0 ");
-                } else if (lastWasOperator) {
-                    throw new Exception("Missing left operand for '" + c + "' at position " + (i + 1));
-                }
-                
+                if (lastWasOperator && (c == '+' || c == '-')) output.append("0 ");
                 while (!stack.isEmpty() && getPrecedence(stack.peek()) >= getPrecedence(c)) {
                     output.append(stack.pop()).append(' ');
                 }
                 stack.push(c);
                 lastWasOperator = true;
-            } else {
-                throw new Exception("Invalid character '" + c + "' at position " + (i + 1));
             }
         }
-        
-        // Pop remaining operators from stack
-        while (!stack.isEmpty()) {
-            char op = stack.pop();
-            if (op == '(') {
-                throw new Exception("Unclosed bracket");
-            }
-            output.append(op).append(' ');
-        }
-        
+        while (!stack.isEmpty()) output.append(stack.pop()).append(' ');
         return output.toString().trim();
     }
     
-    private double evaluateRPN(String rpn) throws Exception {
+    private double evaluateRPN(String rpn, Map<String, Double> vars) throws Exception {
         Stack<Double> stack = new Stack<>();
         StringTokenizer tokenizer = new StringTokenizer(rpn);
         
@@ -237,63 +157,81 @@ public class RPNCalculator extends Application {
             
             if (isNumber(token)) {
                 stack.push(Double.parseDouble(token));
+            } else if (vars.containsKey(token)) {
+                stack.push(vars.get(token));
             } else if (isOperator(token.charAt(0))) {
-                if (stack.size() < 2) {
-                    throw new Exception("Insufficient operands for operator " + token);
-                }
-                
+                if (stack.size() < 2) throw new Exception("Недостаточно операндов");
                 double b = stack.pop();
                 double a = stack.pop();
-                double result;
-                
-                switch (token.charAt(0)) {
-                    case '+': result = a + b; break;
-                    case '-': result = a - b; break;
-                    case '*': result = a * b; break;
-                    case '/': 
-                        if (b == 0) throw new Exception("Division by zero");
-                        result = a / b; 
-                        break;
-                    default: throw new Exception("Unknown operator: " + token);
-                }
-                stack.push(result);
+                stack.push(applyOp(token.charAt(0), a, b));
             }
         }
-        
-        if (stack.size() != 1) {
-            throw new Exception("Invalid expression");
-        }
-        
         return stack.pop();
     }
-    
-    private boolean isOperator(char c) {
-        return c == '+' || c == '-' || c == '*' || c == '/';
+
+    private GridPane createNumberPad() {
+        GridPane grid = new GridPane();
+        grid.setHgap(5); grid.setVgap(5); grid.setPadding(new Insets(10));
+        
+        for (int i = 1; i <= 9; i++) {
+            Button btn = new Button(String.valueOf(i));
+            btn.setPrefSize(50, 50);
+            int finalI = i;
+            btn.setOnAction(e -> inputField.appendText(String.valueOf(finalI)));
+            grid.add(btn, (i - 1) % 3, (i - 1) / 3);
+        }
+        Button zero = new Button("0"); zero.setPrefSize(50, 50);
+        zero.setOnAction(e -> inputField.appendText("0"));
+        
+        Button dot = new Button("."); dot.setPrefSize(50, 50);
+        dot.setOnAction(e -> inputField.appendText("."));
+
+        Button eq = new Button("="); eq.setPrefSize(50, 50);
+        eq.setStyle("-fx-background-color: #66ff66;");
+        eq.setOnAction(e -> calculate());
+
+        grid.add(zero, 0, 3); grid.add(dot, 1, 3); grid.add(eq, 2, 3);
+        return grid;
     }
+
+    private VBox createOperatorPanel() {
+        VBox vbox = new VBox(5);
+        String[] ops = {"+", "-", "*", "/", "(", ")"};
+        for (String op : ops) {
+            Button b = new Button(op);
+            b.setPrefSize(50, 50);
+            b.setOnAction(e -> inputField.appendText(op));
+            vbox.getChildren().add(b);
+        }
+        Button clear = new Button("C");
+        clear.setStyle("-fx-background-color: #ff6666;");
+        clear.setPrefSize(50, 50);
+        clear.setOnAction(e -> { inputField.clear(); outputArea.clear(); rpnArea.clear(); });
+        vbox.getChildren().add(clear);
+        return vbox;
+    }
+
+    private double applyOp(char op, double a, double b) throws Exception {
+        switch (op) {
+            case '+': return a + b;
+            case '-': return a - b;
+            case '*': return a * b;
+            case '/': if (b == 0) throw new Exception("Деление на ноль"); return a / b;
+        }
+        return 0;
+    }
+
+    private boolean isOperator(char c) { return "+-*/".indexOf(c) != -1; }
     
     private boolean isNumber(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        try { Double.parseDouble(str); return true; } catch (Exception e) { return false; }
     }
     
     private int getPrecedence(char op) {
-        switch (op) {
-            case '+':
-            case '-':
-                return 1;
-            case '*':
-            case '/':
-                return 2;
-            default:
-                return 0;
-        }
+        if (op == '+' || op == '-') return 1;
+        if (op == '*' || op == '/') return 2;
+        return 0;
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args) { launch(args); }
 }
