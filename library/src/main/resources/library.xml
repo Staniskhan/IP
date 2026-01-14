@@ -4,7 +4,7 @@
     <title>Java Programming</title>
     <author>James Gosling</author>
     <year>2020</year>
-    <price>49.99</price>
+    <price>49.97</price>
     <category>programming</category>
   </book>
   <book amount="50" id="2" realAmount="17">

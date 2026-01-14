@@ -12,4 +12,10 @@
     <role>READER</role>
     <borrowedBooks/>
   </user>
+  <user>
+    <username>antonzhukovskiyforreal@gmail.com</username>
+    <password>$2a$10$dZPWGeEebUdR9xnChNAaM.pkPl7oWDPY68nZzaV6JaIDIGBfPlbwi</password>
+    <role>READER</role>
+    <borrowedBooks/>
+  </user>
 </users>
