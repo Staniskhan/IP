@@ -4,6 +4,20 @@ public class Grade
     private String subjectName;
     private int grade;
 
+    public Grade(Integer studentId, String subjectName, int grade)
+    {
+        this.studentId = studentId;
+        this.subjectName = subjectName;
+        this.grade = grade;
+    }
+
+    public Grade()
+    {
+        this.studentId = 0;
+        this.subjectName = "";
+        this.grade = 0;
+    }
+
     public Integer getID()
     {
         return studentId;

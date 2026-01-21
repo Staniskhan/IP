@@ -1,7 +1,19 @@
 public class Student
 {
     private Integer studentId;
-    private String name;
+    String name;
+
+    public Student(Integer ID, String name)
+    {
+        this.studentId = ID;
+        this.name = name;
+    }
+
+    public Student()
+    {
+        this.studentId = 0;
+        this.name = "";
+    }
 
     public Integer getID()
     {
